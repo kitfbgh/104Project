@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -12,7 +13,6 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use WithoutMiddleware;
     use RefreshDatabase;
 
     /**
@@ -27,6 +27,7 @@ class UserTest extends TestCase
     public function testUserOrderSuccess()
     {
         $this->demoUserLoginIn();
+        dd(User::all());
         $response = $this->call('GET', '/orders/user/21');
         $this->assertEquals(200, $response->status());
     }
