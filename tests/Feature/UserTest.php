@@ -28,7 +28,7 @@ class UserTest extends TestCase
     public function testUserOrderSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('GET', '/orders/user/19');
+        $response = $this->call('GET', '/orders/user/21');
         $this->assertEquals(200, $response->status());
     }
 
@@ -120,7 +120,7 @@ class UserTest extends TestCase
     public function testUpdateSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('PATCH', '/profile/23', [
+        $response = $this->call('PATCH', '/profile/25', [
             'name' => 'test123',
             'email' => 'test@test.com'
         ]);
@@ -133,6 +133,33 @@ class UserTest extends TestCase
             'name' => 'test123',
             'email' => 'test@test.com'
         ]);
+        $this->assertEquals(404, $response->status());
+    }
+
+    public function testIndexSuccess()
+    {
+        $this->demoAdminLoginIn();
+        $response = $this->call('GET', '/users');
+        $this->assertEquals(200, $response->status());
+    }
+
+    public function testIndexFaild()
+    {
+        $this->demoUserLoginIn();
+        $response = $this->call('GET', '/users');
+        $this->assertEquals(302, $response->status());
+    }
+
+    public function testDestroySuccess()
+    {
+        $this->demoAdminLoginIn();
+        $response = $this->call('DELETE', '/users/26');
+        $this->assertEquals(302, $response->status());
+    }
+
+    public function testDestroyFaild()
+    {
+        $response = $this->call('DELETE', '/users/999');
         $this->assertEquals(404, $response->status());
     }
 }
