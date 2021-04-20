@@ -3,12 +3,15 @@
 namespace Tests\Browser;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Register;
 use Tests\DuskTestCase;
 
 class RegisterTest extends DuskTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function registerPage()
     {
@@ -27,12 +30,12 @@ class RegisterTest extends DuskTestCase
                 ->type('password', 'password')
                 ->type('password_confirmation', 'password')
                 ->press('註冊')
-                ->assertPathIs('/register');
+                ->assertPathIs('/');
         });
 
-        // $this->assertDatabaseHas('users', [
-        //     'name' => 'Bobby Bouwmann',
-        //     'email' => 'register@gmail.com'
-        // ]);
+        $this->assertDatabaseHas('users', [
+            'name' => 'Bobby Bouwmann',
+            'email' => 'register@gmail.com'
+        ]);
     }
 }
