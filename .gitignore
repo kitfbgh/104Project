@@ -5,6 +5,7 @@
 /storage/report
 /vendor
 .env
+.env.testing
 .env.backup
 .env.dusk.local
 .phpunit.result.cache
