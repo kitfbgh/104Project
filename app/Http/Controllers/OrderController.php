@@ -120,7 +120,7 @@ class OrderController extends Controller
 
         if ($validator->fails()) {
             //$messages = $validator->errors()->getMessages();
-            throw new APIException('驗證錯誤', 422);
+            abort(422, '驗證錯誤');
         }
 
         $orderForm = [
@@ -160,7 +160,7 @@ class OrderController extends Controller
     public function update(Request $request, $orderId)
     {
         if (! $order = Order::find($orderId)) {
-            throw new APIException('訂單找不到', 404);
+            abort(404, '查無訂單');
         }
 
         $orderForm = [
@@ -173,11 +173,10 @@ class OrderController extends Controller
 
     public function destroy($orderId)
     {
-        try {
-            $order = Order::find($orderId);
-        } catch (Exception $e) {
-            throw new APIException('找不到對應訂單', 404);
+        if (! $order = Order::find($orderId)) {
+            abort(404, '查無訂單');
         }
+
         if ($order->status == '訂單已送出') {
             foreach ($order->products as $product) {
                 $product->update(['quantity' => $product->quantity + $product->pivot->quantity]);

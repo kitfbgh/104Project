@@ -13,6 +13,7 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+    use WithoutMiddleware;
     use RefreshDatabase;
 
     /**
@@ -27,8 +28,7 @@ class UserTest extends TestCase
     public function testUserOrderSuccess()
     {
         $this->demoUserLoginIn();
-        dd(User::all());
-        $response = $this->call('GET', '/orders/user/21');
+        $response = $this->call('GET', '/orders/user/19');
         $this->assertEquals(200, $response->status());
     }
 
@@ -120,7 +120,7 @@ class UserTest extends TestCase
     public function testUpdateSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('PATCH', '/profile/25', [
+        $response = $this->call('PATCH', '/profile/23', [
             'name' => 'test123',
             'email' => 'test@test.com'
         ]);

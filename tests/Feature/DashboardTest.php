@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
+    use WithoutMiddleware;
     use RefreshDatabase;
 
     /**

@@ -84,7 +84,7 @@ class ProductController extends Controller
 
         if ($validator->fails()) {
             //$messages = $validator->errors()->getMessages();
-            throw new APIException('驗證錯誤', 422);
+            abort(422, '驗證錯誤');
         }
 
         $productForm = [
@@ -128,11 +128,11 @@ class ProductController extends Controller
                     'unit' => 'required|string|max:15',
                 ]);
         } catch (\Exception $e) {
-            throw new APIException($e->getMessage(), 422);
+            abort(422, '驗證錯誤');
         }
 
         if (! $product = Product::find($productId)) {
-            throw new APIException('產品找不到', 404);
+            abort(404, '查無產品');
         }
 
         $productForm = [
@@ -171,7 +171,7 @@ class ProductController extends Controller
         try {
             $product = Product::find($productId);
         } catch (Exception $e) {
-            throw new APIException('找不到對應產品', 404);
+            abort(404, '查無產品');
         }
 
         \Cart::session(auth()->id())->remove($productId);

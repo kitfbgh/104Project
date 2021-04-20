@@ -115,7 +115,7 @@ class OrderTest extends TestCase
             'billing_total' => '0',
             'billing_tax' => '0',
         ]);
-        $this->assertEquals(500, $response->status());
+        $this->assertEquals(422, $response->status());
     }
 
     public function testUpdateSuccess()
@@ -141,7 +141,7 @@ class OrderTest extends TestCase
         $response = $this->call('PATCH', '/orders/999', [
             'status' => 'test',
         ]);
-        $this->assertEquals(500, $response->status());
+        $this->assertEquals(404, $response->status());
     }
 
     public function testDestroySuccess()
@@ -163,6 +163,6 @@ class OrderTest extends TestCase
     public function testDestroyFaild()
     {
         $response = $this->call('DELETE', '/orders/999');
-        $this->assertEquals(500, $response->status());
+        $this->assertEquals(404, $response->status());
     }
 }
