@@ -31,7 +31,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver()
     {
-        $chromeOptions = new ChromeOptions;
+        $chromeOptions = new ChromeOptions();
         $options = $chromeOptions->addArguments(collect([
             '--window-size=1920,1080',
         ])->unless($this->hasHeadlessDisabled(), function ($items) {
