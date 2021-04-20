@@ -1,21 +1,32 @@
-<?xml version="1.0"?>
-<ruleset name="PSR12-laravel">
-  <description>The PSR12 standard, but ignore some rules for Laravel.</description>
-  <exclude-pattern>/bootstrap/cache/</exclude-pattern>
-  <exclude-pattern>/storage/</exclude-pattern>
-  <exclude-pattern>/vendor/</exclude-pattern>
-  <exclude-pattern>/_[a-zA-Z0-9\._]+\.php</exclude-pattern>
-  <exclude-pattern>/\.[a-zA-Z0-9\._]+\.php</exclude-pattern>
-  <arg name="extensions" value="php" />
+<ruleset>
+    <!-- display progress and sniff -->
+    <arg value="n"/>
+    <arg value="p"/>
+    <arg value="s"/>
 
-  <!-- Include the whole PSR12 standard -->
-  <rule ref="PSR12"/>
+    <!-- use colors in output -->
+    <arg name="colors"/>
 
-  <file>app</file>
-  <file>bootstrap</file>
-  <file>config</file>
-  <file>resources</file>
-  <file>routes</file>
-  <file>tests</file>
+    <!-- inherit rules from: -->
+    <rule ref="PSR2"/>
 
+    <!-- specific and just exclude rules in some file -->
+    <rule ref="PSR2">
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments"/>
+    </rule>
+
+
+    <!-- Paths and file to check -->
+    <file>app</file>
+    <file>config</file>
+    <file>database</file>
+    <file>resources</file>
+    <file>routes</file>
+    <file>tests</file>
+
+
+    <!-- Don't check Smarty because it's third-party lib -->
+    <exclude-pattern>class/Smarty/*</exclude-pattern>
+    
 </ruleset>
