@@ -21,6 +21,15 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
+    public function index()
+    {
+        $users = User::all();
+        return view(
+            'users',
+            compact('users'),
+        );
+    }
+
     public function order($userId)
     {
         if (Auth::user()->id != $userId) {
@@ -91,5 +100,16 @@ class UserController extends Controller
         $status = $user->update($userForm);
 
         return redirect(route('user.profile'));
+    }
+
+    public function destroy($userId)
+    {
+        if (! $user = User::find($userId)) {
+            abort(404, '查無使用者');
+        }
+
+        $status = $user->delete();
+
+        return redirect(route('users'));
     }
 }

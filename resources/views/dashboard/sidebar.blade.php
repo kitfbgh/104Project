@@ -21,6 +21,11 @@
             訂單列表
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('users') }}">
+            <span data-feather="users"></span>
+            使用者列表
+          </a>
       </ul>
     </div>
   </nav>

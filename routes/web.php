@@ -24,6 +24,8 @@ $namespace = 'App\\Http\\Controllers\\';
 Auth::routes();
 
 Route::get('/dashboard', ['uses' => $namespace . 'DashboardController@index', 'as' => 'dashboard']);
+Route::get('/users', ['uses' => $namespace . 'UserController@index', 'as' => 'users']);
+Route::delete('/users/{userId}', ['uses' => $namespace . 'UserController@destroy', 'as' => 'users.delete']);
 
 Route::get('products/index', ['uses' => $namespace . 'ProductController@index', 'as' => 'products.index']);
 Route::get('products', ['uses' => $namespace . 'ProductController@page', 'as' => 'products']);

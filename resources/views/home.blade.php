@@ -33,6 +33,15 @@
         </div>
     </div>
   </div>
+  <div class="col-md-4 col-xl-3">
+    <div class="card bg-c-green order-card">
+        <div class="card-block">
+            <h6 class="m-b-20">會員人數</h6>
+            <h2 class="text-right"><i class="fas fa-users f-left"></i></i><span>{{ $userNum }}</span></h2>
+            <p class="m-b-0">-<span class="f-right"></span></p>
+        </div>
+    </div>
+  </div>
 </div>
 
 @endsection
