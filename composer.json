@@ -15,6 +15,7 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^8.12",
         "laravel/legacy-factories": "^1.1",
+        "laravel/ui": "^3.2",
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5"
     },
@@ -25,7 +26,6 @@
         "laravel-fans/lint": "^0.2.0",
         "laravel/dusk": "^6.15",
         "laravel/sail": "^1.0.1",
-        "laravel/ui": "^3.2",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"

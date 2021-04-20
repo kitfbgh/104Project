@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Order;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -12,7 +13,7 @@ use Tests\TestCase;
 class OrderTest extends TestCase
 {
     use WithoutMiddleware;
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * @throws BindingResolutionException
@@ -21,6 +22,7 @@ class OrderTest extends TestCase
     {
         Carbon::setTestNow('2021-03-23 14:00:00');
         parent::setUp();
+        $this->artisan('migrate:fresh');
     }
 
     public function testIndexSuccess()
@@ -130,7 +132,7 @@ class OrderTest extends TestCase
             'billing_total' => '0',
             'billing_tax' => '0',
         ]);
-        $response = $this->call('PATCH', '/orders/4', [
+        $response = $this->call('PATCH', '/orders/1', [
             'status' => 'test',
         ]);
         $this->assertEquals(302, $response->status());
@@ -156,7 +158,7 @@ class OrderTest extends TestCase
             'billing_total' => '0',
             'billing_tax' => '0',
         ]);
-        $response = $this->call('DELETE', '/orders/5');
+        $response = $this->call('DELETE', '/orders/1');
         $this->assertEquals(302, $response->status());
     }
 

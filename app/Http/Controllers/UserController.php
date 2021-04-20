@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -19,6 +20,19 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        if (Gate::allows('user')) {
+            return redirect(route('welcome'));
+        }
+
+        $users = User::all();
+        return view(
+            'users',
+            compact('users'),
+        );
     }
 
     public function order($userId)
@@ -91,5 +105,16 @@ class UserController extends Controller
         $status = $user->update($userForm);
 
         return redirect(route('user.profile'));
+    }
+
+    public function destroy($userId)
+    {
+        if (! $user = User::find($userId)) {
+            abort(404, '查無使用者');
+        }
+
+        $status = $user->delete();
+
+        return redirect(route('users'));
     }
 }
