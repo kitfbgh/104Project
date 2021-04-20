@@ -61,7 +61,7 @@ class ProductTest extends TestCase
             'origin_price' => '123',
             'unit' => '個',
         ]);
-        $this->assertEquals(500, $response->status());
+        $this->assertEquals(422, $response->status());
     }
 
     public function testUpdateSuccess()
@@ -106,7 +106,7 @@ class ProductTest extends TestCase
             'origin_price' => '123',
             'unit' => '個',
         ]);
-        $this->assertEquals(500, $response->status());
+        $this->assertEquals(422, $response->status());
     }
 
     public function testDestroySuccess()

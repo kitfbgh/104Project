@@ -28,7 +28,7 @@ class UserTest extends TestCase
     public function testUserOrderSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('GET', '/orders/user/19');
+        $response = $this->call('GET', '/orders/user/21');
         $this->assertEquals(200, $response->status());
     }
 
@@ -120,7 +120,7 @@ class UserTest extends TestCase
     public function testUpdateSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('PATCH', '/profile/23', [
+        $response = $this->call('PATCH', '/profile/25', [
             'name' => 'test123',
             'email' => 'test@test.com'
         ]);
