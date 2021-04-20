@@ -41,13 +41,31 @@ class OrderController extends Controller
             return redirect(route('welcome'));
         }
 
-        $orders = $this->service->getOrders();
+        $orders = Order::all();
         return view(
             'order.index',
             compact('orders'),
             [
                 'userId' => Auth::id(),
             ],
+        );
+    }
+
+    public function orderDetail($orderId)
+    {
+        if (Gate::allows('user')) {
+            return redirect(route('welcome'));
+        }
+
+        if (! $order = Order::find($orderId)) {
+            abort(404, '查無訂單');
+        }
+        $products = $order->products;
+
+        return view(
+            'order.orderDetail',
+            compact('order'),
+            compact('products'),
         );
     }
 
@@ -61,7 +79,7 @@ class OrderController extends Controller
         $cartItems = \Cart::session(auth()->id())->getContent();
 
         $subTotal = \Cart::session(auth()->id())->getSubTotal();
-        $taxcondition = new \Darryldecode\Cart\CartCondition(array(
+        $taxCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'VAT 5%',
             'type' => 'tax',
             'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
@@ -71,8 +89,8 @@ class OrderController extends Controller
                 'more_data' => 'more data here'
             )
         ));
-        $total = $subTotal + $taxcondition->getCalculatedValue($subTotal);
-        
+        $total = $subTotal + $taxCondition->getCalculatedValue($subTotal);
+
         return view(
             'order.checkout',
             compact('cartItems'),
@@ -85,36 +103,6 @@ class OrderController extends Controller
     }
 
     /**
-    * Display the specified resource.
-    *
-    * @param int $orderId
-    * @return \Illuminate\Http\JsonResponse
-    * @throws APIException
-    * @throws \Exception
-    */
-    public function show($orderId)
-    {
-        try {
-            $order = Order::find($orderId);
-        } catch (Exception $e) {
-            throw new APIException('找不到對應訂單', 404);
-        }
-        return response()->json([
-            'delivery_status' => $order['delivery_status'],
-            'billing_email' => $order['billing_email'],
-            'billing_address' => $order['billing_address'],
-            'billing_city' => $order['billing_city'],
-            'billing_province' => $order['billing_province'],
-            'billing_country' => $order['billing_country'],
-            'billing_postcode' => $order['billing_postcode'],
-            'billing_phone' => $order['billing_phone'],
-            'billing_subtotal' => $order['billing_subtotal'],
-            'billing_tax' => $order['billing_tax'],
-            'billing_total' => $order['billing_total'],
-        ]);
-    }
-
-    /**
     * Store the Order.
     *
     * @param Request $request
@@ -124,7 +112,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|max:50',
+            'email' => 'required|string|email|max:50',
             'name' => 'required|string|max:30',
             'tel' => 'required|string|min:10',
             'address' => 'required|string|max:60',

@@ -17,10 +17,10 @@ class ProductsOfOrderResource extends JsonResource
     {
         $result = [];
         foreach ($this->resource as $resource) {
-            $result = [
+            $result[] = [
                 'id' => $resource->id,
                 'name' => $resource->name,
-                'quantity' => $resource->pivot('quantity'),
+                'quantity' => $resource->pivot->quantity,
                 'unit' => $resource->unit,
             ];
         }

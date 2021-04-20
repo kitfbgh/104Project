@@ -16,12 +16,12 @@ class OrderResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->name,
             'status' => $this->status,
             'email' => $this->billing_email,
             'purchase_time' => $this->created_at,
-            'price' => $this->price,
+            'total' => $this->billing_total,
             'comment' => $this->comment,
+            'phone' => $this->billing_phone,
             'products' => new ProductsOfOrderResource($this->products),
         ];
     }

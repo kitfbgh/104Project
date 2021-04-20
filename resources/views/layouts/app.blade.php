@@ -93,6 +93,86 @@
             float: right;
         }
 
+        .purchase {
+            position: relative;
+            background-color: #FFF;
+            min-height: 680px;
+            padding: 15px;
+            font-family: Times New Roman;
+        }
+
+        .purchase header {
+            padding: 0px 0px 0px 0px;
+            margin-bottom: 0px;
+            border-bottom: 1px solid #3989c6;
+        }
+
+        .purchase header img {
+            max-width: 200px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .purchase .company-details {
+            text-align: right;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .purchase main {
+            padding: 0px 0px;
+            margin-bottom: 0px;
+        }
+
+        .purchase .to-details {
+            text-align: left;
+        }
+
+        .purchase .to-name {
+            font-weight: bold;
+        }
+
+        .purchase .to-name .to-address .to-city {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .purchase .purchase-info {
+            text-align: right;
+        }
+
+        .purchase-info .info-code {
+            font-weight: bold;
+        }
+
+        .purchase-info .info-code .info-date {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            margin: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .table td {
+            margin: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            border: none;
+        }
+
+        .table .blank-row {
+            height: 25px !important;
+            background-color: #FFFFFF;
+            border: none;
+        }
+
+        .table tbody {
+            min-height: 1000px !important;
+        }
+
     </style>
 
     <meta name="theme-color" content="#7952b3">

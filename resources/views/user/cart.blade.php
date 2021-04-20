@@ -16,14 +16,15 @@
         <tbody>
             @foreach ($cartItems as $item)
             <tr>
-                <td scope="row"><img style="height: 100px;width: 100px;" src={{ $item->attributes->imageUrl ?? $item->attributes->image }} alt="{{ $item->name }}"></td>
+                <td scope="row"><img style="height: 100px;width: 100px;" src="{{ $item->attributes->imageUrl ?? asset('storage/' . $item->attributes->image) }}" alt="{{ $item->name }}"></td>
                 <td>{{ $item->name }}</td>
                 <td>
                     $ {{ Cart::session(auth()->id())->get($item->id)->getPriceSum() }}
                 </td>
                 <td>
                     <form action="{{ route('cart.update', $item->id) }}">
-                        <input name="quantity" type="number" value="{{ $item->quantity }}" min="1">
+                        <input name="quantity" type="number" value="{{ $item->quantity }}" min="1" max="{{ $countOfProduct[$item->id] }}">
+                        <p> 尺寸：{{ strtoupper($item->attributes->size) }}</p>
                         <input type="submit" class="btn btn-success" value="save">
                     </form>
                 </td>
@@ -40,7 +41,7 @@
     <a type="button" class="btn btn-secondary" href="{{ route('welcome') }}">繼續購物</a>
     <a role="button" class="btn btn-primary" href="{{ route('orders.checkout') }}">結帳去！</a>    
 @else
-    <h3>購物車內無商品</h3>
-    <a type="button" class="btn btn-outline-success" href="{{ route('welcome') }}">立刻去逛逛吧！</a>
+    <h1 class="text-center">購物車內無商品</h1>
+    <a type="button" class="btn btn-outline-success  btn-block" href="{{ route('welcome') }}">立刻去逛逛吧！</a>
 @endif
 @endsection

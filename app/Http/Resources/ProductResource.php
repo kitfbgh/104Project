@@ -21,10 +21,11 @@ class ProductResource extends JsonResource
             'origin_price' => $this->origin_price,
             'price' => $this->price,
             'unit' => $this->unit,
+            'size' => $this->size,
             'description' => $this->description,
             'content' => $this->content,
             'quantity' => $this->quantity,
-            'image' => $this->imageUrl ?? $this->image,
+            'image' => $this->imageUrl ??  url('storage/' . $this->image),
         ];
     }
 

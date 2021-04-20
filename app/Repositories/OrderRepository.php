@@ -33,6 +33,4 @@ class OrderRepository
     {
         return $this->model->all();
     }
-
-    
 }

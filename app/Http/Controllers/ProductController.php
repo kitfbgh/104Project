@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -63,31 +64,6 @@ class ProductController extends Controller
     }
 
     /**
-    * Display the specified resource.
-    *
-    * @param int $productId
-    * @return \Illuminate\Http\JsonResponse
-    * @throws APIException
-    * @throws \Exception
-    */
-    public function show($productId)
-    {
-        try {
-            $product = Product::find($productId);
-        } catch (Exception $e) {
-            throw new APIException('找不到對應產品', 404);
-        }
-        return response()->json([
-            'name' => $product['name'],
-            'details' => $product['details'],
-            'price' => $product['price'],
-            'description' => $product['description'],
-            'quantity' => $product['quantity'],
-            'imgUrl' => $product['imgUrl'],
-        ]);
-    }
-
-    /**
     * Store the Product.
     *
     * @param Request $request
@@ -121,14 +97,15 @@ class ProductController extends Controller
             'content' => trim($request->get('content')) ?? '',
             'quantity' => intval($request->get('quantity')),
             'imageUrl' => $request->get('imageUrl') ?? null,
+            'size' => $request->get('size'),
         ];
 
         if ($request->has('image')) {
             $fileName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $request->image->extension();
             $imageName = time() . '.' . $extension;
-            $path = 'img/';
-            $request->image->move($path, $imageName);
+            $path = 'images';
+            $request->image->storeAs($path, $imageName, 'public');
 
             $productForm['image'] = $path . '/' . $imageName;
         }
@@ -149,7 +126,7 @@ class ProductController extends Controller
                     'category' => 'required|string|max:30',
                     'origin_price' => 'required|string|max:10',
                     'unit' => 'required|string|max:15',
-            ]);
+                ]);
         } catch (\Exception $e) {
             throw new APIException($e->getMessage(), 422);
         }
@@ -168,22 +145,24 @@ class ProductController extends Controller
             'content' => trim($request->get('content')) ?? '',
             'quantity' => intval($request->get('quantity')),
             'imageUrl' => $request->get('imageUrl') ?? null,
+            'size' => $request->get('size'),
         ];
 
         if ($request->has('image')) {
-            if ($product['image'] !== 'img/noimage.jpeg') {
-                File::delete($product['image']);
+            if ($product['image'] !== 'images/noimage.jpeg') {
+                File::delete('storage/' . $product['image']);
             }
             $fileName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $request->image->extension();
             $imageName = time() . '.' . $extension;
-            $path = 'img/';
-            $request->image->move($path, $imageName);
+            $path = 'images';
+            $request->image->storeAs($path, $imageName, 'public');
 
             $productForm['image'] = $path . '/' . $imageName;
         }
 
         $status = $product->update($productForm);
+
         return redirect(route('products'));
     }
 
@@ -194,6 +173,8 @@ class ProductController extends Controller
         } catch (Exception $e) {
             throw new APIException('找不到對應產品', 404);
         }
+
+        \Cart::session(auth()->id())->remove($productId);
 
         $status = $product->delete();
         return redirect(route('products'));

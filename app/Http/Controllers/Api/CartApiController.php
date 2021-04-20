@@ -44,7 +44,7 @@ class CartController extends Controller
             )
         ));
         $total = $subTotal + $taxCondition->getCalculatedValue($subTotal);
-        
+
         return view(
             'user.cart',
             compact('cartItems'),
@@ -64,7 +64,7 @@ class CartController extends Controller
     * @throws APIException
     */
     public function add(Product $product)
-    {    
+    {
         if ($product->quantity > 0) {
             // add the product to cart
             $data = \Cart::session(auth()->id())->add(array(
@@ -80,7 +80,6 @@ class CartController extends Controller
                 'associatedModel' => $product,
             ));
         }
-        
 
         return redirect(route('cart'));
     }

@@ -28,8 +28,7 @@ class UserApiController extends BaseController
         ];
         if (Auth::user()->role === User::ROLE_ADMIN || Auth::user()->role === User::ROLE_MANAGER) {//是管理者，回傳所有會員資料
             return $this->sendResponse($admins->toArray(), 'Users retrieved successfully.');
-        }
-        else {//不是管理者，回傳該會員自己的資料
+        } else {//不是管理者，回傳該會員自己的資料
             return response([
                 'user' => $users,
             ]);
@@ -42,7 +41,9 @@ class UserApiController extends BaseController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-      public function adminStore(Request $request) { //管理者註冊的function
+    //管理者註冊的function
+    public function adminStore(Request $request)
+    {
         try {
             $request->validate([ //這邊會驗證註冊的資料是否符合格式
                 'name' => ['required', 'string', 'max:255'],
@@ -65,11 +66,11 @@ class UserApiController extends BaseController
         } catch (Exception $e) {
             $this->sendError($e, 'Registered failed.', 500);
         }
-
     }
+
     public function store(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -121,8 +122,7 @@ class UserApiController extends BaseController
             $user->password = Hash::make($request['password']);
             $user->save();
             return $this->sendResponse($user->toArray(), 'User updated successfully.');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return $this->sendError($e, 'Updated failed.', 500);
         }
     }
@@ -135,11 +135,11 @@ class UserApiController extends BaseController
      */
     public function destroy(User $users)
     {
-        if ( Auth::user()->role === User::ROLE_ADMIN){ //驗證是否為管理者
-            if ($users->delete())
+        if (Auth::user()->role === User::ROLE_ADMIN) { //驗證是否為管理者
+            if ($users->delete()) {
                 return $this->sendResponse($users->toArray(), 'User deleted successfully.');
-        }
-        else {
+            }
+        } else {
             return "You have no authority to delete";
         }
     }

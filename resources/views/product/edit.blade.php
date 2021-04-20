@@ -18,7 +18,7 @@
           </div>
           <form action="/products/{{ $product['id'] }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PATCH')
             <input type="hidden" name="userId" value="{{ $userId }}"/>
           <div class="modal-body">
             <div class="row">
@@ -138,7 +138,7 @@
                     class="form-control"
                     id="description{{ $product['id'] }}"
                     placeholder="請輸入產品描述"
-                  ></textarea>
+                  >{{ $product['description'] }}</textarea>
                 </div>
                 <div class="form-group">
                   <label for="content{{ $product['id'] }}">說明內容</label>
@@ -148,7 +148,7 @@
                     class="form-control"
                     id="content{{ $product['id'] }}"
                     placeholder="請輸入產品說明內容"
-                  ></textarea>
+                  >{{ $product['content'] }}</textarea>
                 </div>
               </div>
             </div>
