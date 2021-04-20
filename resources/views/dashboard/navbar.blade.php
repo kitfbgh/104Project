@@ -4,7 +4,7 @@
     {{-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> --}}
     <ul class="navbar-nav px-5 ml-auto">
       <li class="nav-item mr-auto">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ route('welcome') }}">
           <i class="fas fa-list"></i>
           商品列表
         </a>
@@ -33,13 +33,13 @@
       @guest
         @if (Route::has('login'))
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            <a class="nav-link" href="{{ route('login') }}">{{ __('登入') }}</a>
           </li>
         @endif
                             
         @if (Route::has('register'))
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+          <a class="nav-link" href="{{ route('register') }}">{{ __('註冊') }}</a>
         </li>
         @endif
       @else
@@ -47,8 +47,9 @@
           <a id="navbarDropdown " class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
             {{ Auth::user()->name }}
           </a>
-
+          
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            @cannot('manager')
             <a class="dropdown-item" href="{{ route('user.profile') }}">
               <i class="fas fa-id-badge"></i>
               個人資料
@@ -58,6 +59,7 @@
               訂單
             </a>
             <hr>
+            @endcan
             <a class="dropdown-item" href="{{ route('logout') }}"
                onclick="event.preventDefault();
                document.getElementById('logout-form').submit();">

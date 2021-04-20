@@ -33,6 +33,4 @@ class ProductRepository
     {
         return $this->model->all();
     }
-
-    
 }

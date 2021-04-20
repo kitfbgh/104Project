@@ -26,14 +26,13 @@ class CartController extends Controller
     {
         $cartItems = \Cart::session(auth()->id())->getContent();
 
+        $productsOfCart = [];
         foreach ($cartItems as $item) {
-            if (! $product = Product::find($item->id)) {
-                \Cart::session(auth()->id())->remove($item->id);
-            }
+            $productsOfCart[$item->id] = Product::find($item->id)->quantity;
         }
 
         $subTotal = \Cart::session(auth()->id())->getSubTotal();
-        $taxcondition = new \Darryldecode\Cart\CartCondition(array(
+        $taxCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'VAT 5%',
             'type' => 'tax',
             'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
@@ -43,14 +42,15 @@ class CartController extends Controller
                 'more_data' => 'more data here'
             )
         ));
-        $total = $subTotal + $taxcondition->getCalculatedValue($subTotal);
-        
+        $total = $subTotal + $taxCondition->getCalculatedValue($subTotal);
+
         return view(
             'user.cart',
             compact('cartItems'),
             [
                 'subTotal' => $subTotal,
                 'total' => $total,
+                'countOfProduct' => $productsOfCart,
             ],
         );
     }
@@ -62,8 +62,8 @@ class CartController extends Controller
     * @return \Illuminate\Http\JsonResponse
     * @throws APIException
     */
-    public function add(Product $product)
-    {    
+    public function add(Request $request, Product $product)
+    {
         if ($product->quantity > 0) {
             // add the product to cart
             $data = \Cart::session(auth()->id())->add(array(
@@ -75,11 +75,11 @@ class CartController extends Controller
                     'imageUrl' => $product->imageUrl,
                     'image' => $product->image,
                     'unit' => $product->unit,
+                    'size' => $request->get('size'),
                 ),
                 'associatedModel' => $product,
             ));
         }
-        
 
         return redirect(route('cart'));
     }
@@ -94,13 +94,13 @@ class CartController extends Controller
                 )
             ]);
         }
-        return back();
+        return redirect(route('cart'));
     }
 
     public function destroy($productId)
     {
         \Cart::session(auth()->id())->remove($productId);
 
-        return back();
+        return redirect(route('cart'));
     }
 }

@@ -22,6 +22,7 @@ class Product extends Model
         'category',
         'unit',
         'origin_price',
+        'size',
     ];
 
     public function categories()

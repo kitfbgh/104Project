@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "darkaonline/l5-swagger": "^8.0",
         "darryldecode/cart": "^4.2",
         "doctrine/dbal": "^3.0",
         "fideloper/proxy": "^4.4",
@@ -13,11 +14,16 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "laravel/framework": "^8.12",
+        "laravel/legacy-factories": "^1.1",
+        "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5"
     },
     "require-dev": {
+        "beyondcode/dusk-dashboard": "dev-master",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
+        "laravel-fans/lint": "^0.2.0",
+        "laravel/dusk": "^6.15",
         "laravel/sail": "^1.0.1",
         "laravel/ui": "^3.2",
         "mockery/mockery": "^1.4.2",

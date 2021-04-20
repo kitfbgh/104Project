@@ -61,7 +61,7 @@ class OrderController extends Controller
             abort(403, '查無訂單');
         }
         $products = $order->products;
-        
+
         return view(
             'order.orderDetail',
             compact('order'),
@@ -90,7 +90,7 @@ class OrderController extends Controller
             )
         ));
         $total = $subTotal + $taxCondition->getCalculatedValue($subTotal);
-        
+
         return view(
             'order.checkout',
             compact('cartItems'),

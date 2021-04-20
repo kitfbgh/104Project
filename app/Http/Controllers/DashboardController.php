@@ -37,7 +37,7 @@ class DashboardController extends Controller
             'home',
             [
                 'productNum' => $productNum,
-                'orderTotal' =>$orderTotal,
+                'orderTotal' => $orderTotal,
                 'orderCompleted' => $orderCompleted,
             ],
         );

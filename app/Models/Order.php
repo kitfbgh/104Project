@@ -24,21 +24,21 @@ class Order extends Model
         'user_id',
     ];
 
-   public function user()
-   {
-       return $this->belongsTo(
-           User::class,
-           'user_id'
-       );
-   } 
+    public function user()
+    {
+        return $this->belongsTo(
+            User::class,
+            'user_id'
+        );
+    }
 
-   public function products()
-   {
-       return $this->belongsToMany(
-           Product::class,
-           'order_product',
-           'order_id',
-           'product_id',
-       )->withPivot('quantity');
-   }
+    public function products()
+    {
+        return $this->belongsToMany(
+            Product::class,
+            'order_product',
+            'order_id',
+            'product_id',
+        )->withPivot('quantity');
+    }
 }

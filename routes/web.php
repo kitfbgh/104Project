@@ -19,28 +19,38 @@ Route::get('/', function () {
     return view('welcome', compact('products'));
 })->name('welcome');
 
-$namespacePrefix = 'App\\Http\\Controllers\\';
+$namespace = 'App\\Http\\Controllers\\';
 
 Auth::routes();
 
-Route::get('/dashboard', ['uses' => $namespacePrefix . 'DashboardController@index', 'as' => 'dashboard']);
+Route::get('/dashboard', ['uses' => $namespace . 'DashboardController@index', 'as' => 'dashboard']);
 
-Route::get('products/index', ['uses' => $namespacePrefix . 'ProductController@index', 'as' => 'products.index']);
-Route::get('products', ['uses' => $namespacePrefix . 'ProductController@page', 'as' => 'products']);
-Route::post('products', ['uses' => $namespacePrefix . 'ProductController@store', 'as' => 'products.create']);
-Route::put('products/{productId}', ['uses' => $namespacePrefix . 'ProductController@update', 'as' => 'products.update']);
-Route::delete('products/{productId}', ['uses' => $namespacePrefix . 'ProductController@destroy', 'as' => 'products.delete']);
+Route::get('products/index', ['uses' => $namespace . 'ProductController@index', 'as' => 'products.index']);
+Route::get('products', ['uses' => $namespace . 'ProductController@page', 'as' => 'products']);
+Route::post('products', ['uses' => $namespace . 'ProductController@store', 'as' => 'products.create']);
+Route::patch('products/{productId}', ['uses' => $namespace . 'ProductController@update', 'as' => 'products.update']);
+Route::delete('products/{productId}', ['uses' => $namespace . 'ProductController@destroy', 'as' => 'products.delete']);
 
-Route::get('cart', ['uses' => $namespacePrefix . 'CartController@index', 'as' => 'cart']);
-Route::get('cart/add/{product}', ['uses' => $namespacePrefix . 'CartController@add', 'as' => 'cart.add']);
-Route::get('cart/update/{productId}', ['uses' => $namespacePrefix . 'CartController@update', 'as' => 'cart.update']);
-Route::get('cart/delete/{productId}', ['uses' => $namespacePrefix . 'CartController@destroy', 'as' => 'cart.delete']);
+Route::get('cart', ['uses' => $namespace . 'CartController@index', 'as' => 'cart']);
+Route::get('cart/add/{product}', ['uses' => $namespace . 'CartController@add', 'as' => 'cart.add']);
+Route::get('cart/update/{productId}', ['uses' => $namespace . 'CartController@update', 'as' => 'cart.update']);
+Route::get('cart/delete/{productId}', ['uses' => $namespace . 'CartController@destroy', 'as' => 'cart.delete']);
 
-Route::get('orders', ['uses' => $namespacePrefix . 'OrderController@index', 'as' => 'orders']);
-Route::get('orders/checkout', ['uses' => $namespacePrefix . 'OrderController@checkout', 'as' => 'orders.checkout']);
-Route::post('orders', ['uses' => $namespacePrefix . 'OrderController@store', 'as' => 'orders.create']);
-Route::put('orders/{orderId}', ['uses' => $namespacePrefix . 'OrderController@update', 'as' => 'orders.update']);
-Route::delete('orders/{orderId}', ['uses' => $namespacePrefix . 'OrderController@destroy', 'as' => 'orders.delete']);
+Route::get('orders', ['uses' => $namespace . 'OrderController@index', 'as' => 'orders']);
+Route::get('orders/order/{orderId}', ['uses' => $namespace . 'OrderController@orderDetail', 'as' => 'orders.detail']);
+Route::get('orders/checkout', ['uses' => $namespace . 'OrderController@checkout', 'as' => 'orders.checkout']);
+Route::post('orders', ['uses' => $namespace . 'OrderController@store', 'as' => 'orders.create']);
+Route::patch('orders/{orderId}', ['uses' => $namespace . 'OrderController@update', 'as' => 'orders.update']);
+Route::delete('orders/{orderId}', ['uses' => $namespace . 'OrderController@destroy', 'as' => 'orders.delete']);
 
-Route::get('orders/{userId}', ['uses' => $namespacePrefix . 'UserController@order', 'as' => 'user.orders']);
-Route::get('profile', ['uses' => $namespacePrefix . 'UserController@profile', 'as' => 'user.profile']);
+Route::get('orders/user/{userId}', ['uses' => $namespace . 'UserController@order', 'as' => 'user.orders']);
+Route::get(
+    'orders/{orderId}/detail',
+    [
+        'uses' => $namespace . 'UserController@orderDetail',
+        'as' => 'user.order.detail'
+    ]
+);
+Route::get('products/{productId}', ['uses' => $namespace . 'UserController@productDetail', 'as' => 'products.detail']);
+Route::get('profile', ['uses' => $namespace . 'UserController@profile', 'as' => 'user.profile']);
+Route::patch('profile/{userId}', ['uses' => $namespace . 'UserController@update', 'as' => 'user.profile.update']);

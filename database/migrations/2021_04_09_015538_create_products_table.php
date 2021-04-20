@@ -20,10 +20,12 @@ class CreateProductsTable extends Migration
             $table->float('origin_price');
             $table->float('price');
             $table->string('unit');
+            $table->string('size')->nullable();
             $table->text('description')->nullable();
             $table->text('content')->nullable();
             $table->unsignedInteger('quantity');
             $table->string('imageUrl')->nullable();
+            $table->string('image')->nullable()->default('images/noimage.jpeg');
             $table->timestamps();
         });
     }
