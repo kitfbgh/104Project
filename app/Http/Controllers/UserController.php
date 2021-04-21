@@ -53,10 +53,10 @@ class UserController extends Controller
     public function orderDetail($orderId)
     {
         if (! $order = Order::find($orderId)) {
-            abort(404, '查無訂單');
+            abort(404);
         }
         if (! $products = $order->products) {
-            abort(404, '訂單無商品');
+            abort(404);
         }
 
         return view(
@@ -78,7 +78,7 @@ class UserController extends Controller
     public function productDetail($productId)
     {
         if (! $product = Product::find($productId)) {
-            abort(404, '查無產品');
+            abort(404);
         }
         return view(
             'user.productDetail',
@@ -94,7 +94,7 @@ class UserController extends Controller
         ]);
 
         if (! $user = User::find($userId)) {
-            abort(404, '查無使用者');
+            abort(404);
         }
 
         $userForm = [
@@ -110,7 +110,7 @@ class UserController extends Controller
     public function destroy($userId)
     {
         if (! $user = User::find($userId)) {
-            abort(404, '查無使用者');
+            abort(404);
         }
 
         $status = $user->delete();

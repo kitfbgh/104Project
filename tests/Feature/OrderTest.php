@@ -37,6 +37,7 @@ class OrderTest extends TestCase
         $this->demoUserLoginIn();
         $response = $this->call('GET', '/orders');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/');
     }
 
     public function testOrderDetailSuccess()
@@ -71,6 +72,7 @@ class OrderTest extends TestCase
         ]);
         $response = $this->call('GET', '/orders/order/2');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/');
 
         $this->demoAdminLoginIn();
         $response = $this->call('GET', '/orders/order/999');
@@ -104,6 +106,21 @@ class OrderTest extends TestCase
             'tax' => '0',
         ]);
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/orders/user/1');
+
+        $this->demoAdminLoginIn();
+        $response = $this->call('POST', '/orders', [
+            'email' => 'test@test.com',
+            'name' => 'test',
+            'tel' => '1231231231',
+            'address' => 'test',
+            'userId' => 8,
+            'subTotal' => '0',
+            'total' => '0',
+            'tax' => '0',
+        ]);
+        $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/orders');
     }
 
     public function testStoreFaild()
@@ -136,6 +153,7 @@ class OrderTest extends TestCase
             'status' => 'test',
         ]);
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/orders');
     }
 
     public function testUpdateFaild()
@@ -160,6 +178,7 @@ class OrderTest extends TestCase
         ]);
         $response = $this->call('DELETE', '/orders/1');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/orders');
     }
 
     public function testDestroyFaild()

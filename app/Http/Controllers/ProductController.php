@@ -53,17 +53,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show all products.
-     *
-     * @return
-     */
-    public function index()
-    {
-        $products = $this->service->getProducts();
-        return $products;
-    }
-
-    /**
     * Store the Product.
     *
     * @param Request $request
@@ -132,7 +121,7 @@ class ProductController extends Controller
         }
 
         if (! $product = Product::find($productId)) {
-            abort(404, '查無產品');
+            abort(404);
         }
 
         $productForm = [
@@ -168,10 +157,9 @@ class ProductController extends Controller
 
     public function destroy($productId)
     {
-        try {
-            $product = Product::find($productId);
-        } catch (Exception $e) {
-            abort(404, '查無產品');
+        
+        if(! $product = Product::find($productId)) {
+            abort(404);
         }
 
         \Cart::session(auth()->id())->remove($productId);

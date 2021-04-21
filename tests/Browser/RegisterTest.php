@@ -13,7 +13,10 @@ class RegisterTest extends DuskTestCase
 {
     use DatabaseTransactions;
 
-    public function setUp():void
+    /**
+     * @throws BindingResolutionException
+     */
+    public function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate:fresh');

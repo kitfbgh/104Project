@@ -58,7 +58,7 @@ class OrderController extends Controller
         }
 
         if (! $order = Order::find($orderId)) {
-            abort(404, '查無訂單');
+            abort(404);
         }
         $products = $order->products;
 
@@ -160,7 +160,7 @@ class OrderController extends Controller
     public function update(Request $request, $orderId)
     {
         if (! $order = Order::find($orderId)) {
-            abort(404, '查無訂單');
+            abort(404);
         }
 
         $orderForm = [
@@ -174,7 +174,7 @@ class OrderController extends Controller
     public function destroy($orderId)
     {
         if (! $order = Order::find($orderId)) {
-            abort(404, '查無訂單');
+            abort(404);
         }
 
         if ($order->status == '訂單已送出') {

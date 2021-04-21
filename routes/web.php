@@ -27,7 +27,6 @@ Route::get('/dashboard', ['uses' => $namespace . 'DashboardController@index', 'a
 Route::get('/users', ['uses' => $namespace . 'UserController@index', 'as' => 'users']);
 Route::delete('/users/{userId}', ['uses' => $namespace . 'UserController@destroy', 'as' => 'users.delete']);
 
-Route::get('products/index', ['uses' => $namespace . 'ProductController@index', 'as' => 'products.index']);
 Route::get('products', ['uses' => $namespace . 'ProductController@page', 'as' => 'products']);
 Route::post('products', ['uses' => $namespace . 'ProductController@store', 'as' => 'products.create']);
 Route::patch('products/{productId}', ['uses' => $namespace . 'ProductController@update', 'as' => 'products.update']);
