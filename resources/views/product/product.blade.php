@@ -19,7 +19,7 @@
                         <p class="card-text">商品數量：{{ $product['quantity'] }} {{ $product['unit'] }}</p>
                         <p class="card-text">原價：${{ $product['origin_price'] }}   元 / {{ $product['unit'] }}</p>
                         <p class="card_text">售價：${{ $product['price'] }}   元 / {{ $product['unit'] }}</p>
-                        <p class="card-text"><small class="text-muted">Last updated at {{ $product['updated_at'] }}</small></p>
+                        <p class="card-text"><small class="text-muted">最後更新時間 : {{ $product['updated_at'] }}</small></p>
                     </div>
                 </div>
                 <div class="col-2">
