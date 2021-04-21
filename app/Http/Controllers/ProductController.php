@@ -157,8 +157,7 @@ class ProductController extends Controller
 
     public function destroy($productId)
     {
-        
-        if(! $product = Product::find($productId)) {
+        if (! $product = Product::find($productId)) {
             abort(404);
         }
 
