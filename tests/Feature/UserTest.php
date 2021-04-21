@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -14,7 +15,7 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
     use WithoutMiddleware;
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * @throws BindingResolutionException
@@ -23,12 +24,13 @@ class UserTest extends TestCase
     {
         Carbon::setTestNow('2021-03-23 14:00:00');
         parent::setUp();
+        $this->artisan('migrate:fresh');
     }
 
     public function testUserOrderSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('GET', '/orders/user/19');
+        $response = $this->call('GET', '/orders/user/1');
         $this->assertEquals(200, $response->status());
     }
 
@@ -74,7 +76,7 @@ class UserTest extends TestCase
             'billing_total' => '0',
             'billing_tax' => '0',
         ]);
-        $response = $this->call('GET', '/orders/6/detail');
+        $response = $this->call('GET', '/orders/1/detail');
         $this->assertEquals(200, $response->status());
     }
 
@@ -107,7 +109,7 @@ class UserTest extends TestCase
             'origin_price' => '123',
             'unit' => '個',
         ]);
-        $response = $this->call('GET', '/products/6');
+        $response = $this->call('GET', '/products/1');
         $this->assertEquals(200, $response->status());
     }
 
@@ -120,7 +122,7 @@ class UserTest extends TestCase
     public function testUpdateSuccess()
     {
         $this->demoUserLoginIn();
-        $response = $this->call('PATCH', '/profile/23', [
+        $response = $this->call('PATCH', '/profile/1', [
             'name' => 'test123',
             'email' => 'test@test.com'
         ]);
@@ -153,7 +155,7 @@ class UserTest extends TestCase
     public function testDestroySuccess()
     {
         $this->demoAdminLoginIn();
-        $response = $this->call('DELETE', '/users/26');
+        $response = $this->call('DELETE', '/users/1');
         $this->assertEquals(302, $response->status());
     }
 

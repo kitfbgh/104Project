@@ -4,6 +4,7 @@ namespace Browser;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Login;
@@ -11,7 +12,13 @@ use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->artisan('migrate:fresh');
+    }
 
     /** @test */
     public function loginPage()
@@ -31,7 +38,7 @@ class LoginTest extends DuskTestCase
                 ->type('email', $user->email)
                 ->type('password', 'password')
                 ->press('登入')
-                ->assertPathIs('/login');
+                ->assertPathIs('/');
         });
     }
 }

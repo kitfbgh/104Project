@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
@@ -10,7 +11,7 @@ use Tests\TestCase;
 class DashboardTest extends TestCase
 {
     use WithoutMiddleware;
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * @throws BindingResolutionException
@@ -19,6 +20,7 @@ class DashboardTest extends TestCase
     {
         Carbon::setTestNow('2021-03-23 14:00:00');
         parent::setUp();
+        $this->artisan('migrate:fresh');
     }
 
     public function testIndexSuccess()

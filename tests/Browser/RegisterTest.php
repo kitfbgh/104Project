@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Register;
@@ -10,7 +11,13 @@ use Tests\DuskTestCase;
 
 class RegisterTest extends DuskTestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->artisan('migrate:fresh');
+    }
 
     /** @test */
     public function registerPage()
