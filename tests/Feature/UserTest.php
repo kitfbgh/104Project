@@ -39,6 +39,7 @@ class UserTest extends TestCase
         $this->demoUserLoginIn();
         $response = $this->call('GET', '/orders/user/999');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/');
     }
 
     public function testUserOrderDetailSuccess()
@@ -84,6 +85,7 @@ class UserTest extends TestCase
     {
         $response = $this->call('GET', '/orders/999/detail');
         $this->assertEquals(404, $response->status());
+        $response->assertSee('Not Found');
     }
 
     public function testProfileSuccess()
@@ -127,6 +129,7 @@ class UserTest extends TestCase
             'email' => 'test@test.com'
         ]);
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/profile');
     }
 
     public function testUpdateFaild()
@@ -150,6 +153,7 @@ class UserTest extends TestCase
         $this->demoUserLoginIn();
         $response = $this->call('GET', '/users');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/');
     }
 
     public function testDestroySuccess()
@@ -157,6 +161,7 @@ class UserTest extends TestCase
         $this->demoAdminLoginIn();
         $response = $this->call('DELETE', '/users/1');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/users');
     }
 
     public function testDestroyFaild()

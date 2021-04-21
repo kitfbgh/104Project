@@ -36,6 +36,7 @@ class ProductTest extends TestCase
         $this->demoUserLoginIn();
         $response = $this->call('GET', '/products');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/');
     }
 
     public function testStoreSuccess()
@@ -50,6 +51,7 @@ class ProductTest extends TestCase
             'unit' => '個',
         ]);
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/products');
     }
 
     public function testStoreFaild()
@@ -87,6 +89,7 @@ class ProductTest extends TestCase
             'unit' => '個',
         ]);
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/products');
     }
 
     public function testUpdateFaild()
@@ -109,6 +112,16 @@ class ProductTest extends TestCase
             'unit' => '個',
         ]);
         $this->assertEquals(422, $response->status());
+
+        $response = $this->call('PATCH', '/products/3', [
+            'name' => 'testStoreFaild',
+            'price' => '123',
+            'quantity' => '321',
+            'category' => 'testStore',
+            'origin_price' => '123',
+            'unit' => '個',
+        ]);
+        $this->assertEquals(404, $response->status());
     }
 
     public function testDestroySuccess()
@@ -124,12 +137,13 @@ class ProductTest extends TestCase
         ]);
         $response = $this->call('DELETE', '/products/1');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/products');
     }
 
     public function testDestroyFaild()
     {
         $this->demoAdminLoginIn();
         $response = $this->call('DELETE', '/products/999');
-        $this->assertEquals(500, $response->status());
+        $this->assertEquals(404, $response->status());
     }
 }

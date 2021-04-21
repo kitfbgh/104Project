@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
@@ -35,5 +34,6 @@ class DashboardTest extends TestCase
         $this->demoUserLoginIn();
         $response = $this->call('GET', '/dashboard');
         $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/');
     }
 }
