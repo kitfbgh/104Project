@@ -1,0 +1,57 @@
+dist: bionic
+language: php
+php:
+  - 7.4
+
+branch:
+  only:
+    - test
+
+services:
+  - mysql
+
+install:
+  - cp .env.travis .env
+  - sudo mysql -e 'create database homestead;'
+  - composer self-update
+  - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+
+before_script:
+  - php artisan key:generate
+  - php artisan migrate
+
+script:
+  - vendor/bin/phpunit --coverage-text
+  # Search for PHP syntax errors.
+  - find -L . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+  - vendor/bin/phpcs
+
+cache:
+  directories:
+    - node_modules
+    - "$HOME/.composer/cache/files"
+    - vendor
+
+# 在 travis CI 幫你打包前做的事
+before_deploy:
+  # 修改 .env.example，把相關資料改進去
+  - sed -in-place 's/localhost/www.aaa.net/g' .env.example
+
+deploy:
+  provider: elasticbeanstalk
+  edge: true
+  skip_cleanup: true
+  # AWS_ACCESS_KEY 和 AWS_SECRET_KEY 可以存進 travis CI 裡
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  region: "ap-northeast-1"
+  app: "natz-testproject"
+  env: "Natztestproject-env"
+  bucket_name: "104-aws-training-cicd-bucket"
+  bucket_path: "natz/"
+  on:
+    branch: test
+
+
+after_deploy:
+  - echo "done deploying"

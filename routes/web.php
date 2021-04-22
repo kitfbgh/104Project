@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactUsController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,7 @@ Route::get('/', function () {
 
 $namespace = 'App\\Http\\Controllers\\';
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/dashboard', ['uses' => $namespace . 'DashboardController@index', 'as' => 'dashboard']);
 Route::get('/users', ['uses' => $namespace . 'UserController@index', 'as' => 'users']);
@@ -46,12 +47,15 @@ Route::delete('orders/{orderId}', ['uses' => $namespace . 'OrderController@destr
 
 Route::get('orders/user/{userId}', ['uses' => $namespace . 'UserController@order', 'as' => 'user.orders']);
 Route::get(
-    'orders/{orderId}/detail',
+    'orders/{order}/detail',
     [
         'uses' => $namespace . 'UserController@orderDetail',
         'as' => 'user.order.detail'
     ]
 );
-Route::get('products/{productId}', ['uses' => $namespace . 'UserController@productDetail', 'as' => 'products.detail']);
+Route::get('products/{product}', ['uses' => $namespace . 'UserController@productDetail', 'as' => 'products.detail']);
 Route::get('profile', ['uses' => $namespace . 'UserController@profile', 'as' => 'user.profile']);
 Route::patch('profile/{userId}', ['uses' => $namespace . 'UserController@update', 'as' => 'user.profile.update']);
+
+Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact');
+Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact.store');

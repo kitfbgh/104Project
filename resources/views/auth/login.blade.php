@@ -56,6 +56,11 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('登入') }}
                                 </button>
+                                @if (Route::has('password.request'))
+                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                        {{ __('忘記密碼?') }}
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </form>

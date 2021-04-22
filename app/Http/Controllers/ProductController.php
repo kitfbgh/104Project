@@ -16,19 +16,13 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
     /**
-    * @var ProductService
-    */
-    private $service;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
      */
     public function __construct(ProductService $service)
     {
-        $this->service = $service;
-        $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     /**
@@ -53,12 +47,11 @@ class ProductController extends Controller
     }
 
     /**
-    * Store the Product.
-    *
-    * @param Request $request
-    * @return \Illuminate\Http\JsonResponse
-    * @throws APIException
-    */
+     * Store the Product.
+     *
+     * @param Request $request
+     * @return view
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -101,9 +94,15 @@ class ProductController extends Controller
 
         Product::create($productForm);
 
-        return redirect(route('products'));
+        return redirect(route('products'))->with('success', '產品新增成功');
     }
 
+    /**
+     * Update the Product.
+     *
+     * @param Request $request, $productId
+     * @return view
+     */
     public function update(Request $request, $productId)
     {
         try {
@@ -152,9 +151,15 @@ class ProductController extends Controller
 
         $status = $product->update($productForm);
 
-        return redirect(route('products'));
+        return redirect(route('products'))->with('success', '產品更新成功');
     }
 
+    /**
+     * Delete the Product.
+     *
+     * @param $productId
+     * @return view
+     */
     public function destroy($productId)
     {
         if (! $product = Product::find($productId)) {
@@ -164,6 +169,6 @@ class ProductController extends Controller
         \Cart::session(auth()->id())->remove($productId);
 
         $status = $product->delete();
-        return redirect(route('products'));
+        return redirect(route('products'))->with('delete', '產品已刪除');
     }
 }

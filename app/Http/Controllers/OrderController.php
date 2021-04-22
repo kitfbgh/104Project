@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends Controller
 {
     /**
-     * @var OrderService
-     */
-    private $service;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -27,13 +22,13 @@ class OrderController extends Controller
     public function __construct(OrderService $service)
     {
         $this->service = $service;
-        $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     /**
-     * Show all Cart.
+     * Show all Orders.
      *
-     * @return
+     * @return view
      */
     public function index()
     {
@@ -41,7 +36,7 @@ class OrderController extends Controller
             return redirect(route('welcome'));
         }
 
-        $orders = Order::all();
+        $orders = Order::simplePaginate(10);
         return view(
             'order.index',
             compact('orders'),
@@ -51,6 +46,12 @@ class OrderController extends Controller
         );
     }
 
+    /**
+     * Show the OrderDetail.
+     *
+     * @param $orderId
+     * @return view
+     */
     public function orderDetail($orderId)
     {
         if (Gate::allows('user')) {
@@ -70,9 +71,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Show all Cart.
+     * Show this Order.
      *
-     * @return
+     * @return view
      */
     public function checkout()
     {
@@ -106,8 +107,7 @@ class OrderController extends Controller
     * Store the Order.
     *
     * @param Request $request
-    * @return \Illuminate\Http\JsonResponse
-    * @throws APIException
+    * @return view
     */
     public function store(Request $request)
     {
@@ -116,10 +116,10 @@ class OrderController extends Controller
             'name' => 'required|string|max:30',
             'tel' => 'required|string|min:10',
             'address' => 'required|string|max:60',
+            'payment' => 'required|string|max:30',
         ]);
 
         if ($validator->fails()) {
-            //$messages = $validator->errors()->getMessages();
             abort(422, '驗證錯誤');
         }
 
@@ -134,6 +134,7 @@ class OrderController extends Controller
             'billing_total' => (float) $request->get('total'),
             'status' => $request->get('status'),
             'user_id' => $request->get('userId'),
+            'payment' => $request->get('payment'),
         ];
 
         $orderId = Order::create($orderForm)->id;
@@ -151,12 +152,18 @@ class OrderController extends Controller
         \Cart::session(auth()->id())->clear();
 
         if (Auth::user()->role == 'user') {
-            return redirect(route('user.orders', Auth::user()->id));
+            return redirect(route('user.orders', Auth::user()->id))->with('success', '訂單新增成功');
         }
 
-        return redirect(route('orders'));
+        return redirect(route('orders'))->with('success', '訂單新增成功');
     }
 
+    /**
+     * Update the Order.
+     *
+     * @param Request $request, $orderId
+     * @return view
+     */
     public function update(Request $request, $orderId)
     {
         if (! $order = Order::find($orderId)) {
@@ -168,9 +175,20 @@ class OrderController extends Controller
         ];
 
         $status = $order->update($orderForm);
-        return redirect(route('orders'));
+
+        if (Gate::allows('user')) {
+            return redirect(route('user.order.detail', $orderId))->with('success', '訂單狀態已更新');
+        }
+
+        return redirect(route('orders.detail', $orderId))->with('success', '訂單狀態已更新');
     }
 
+    /**
+     * Delete the Order.
+     *
+     * @param $orderId
+     * @return view
+     */
     public function destroy($orderId)
     {
         if (! $order = Order::find($orderId)) {
@@ -184,6 +202,6 @@ class OrderController extends Controller
         }
         $order->products()->detach();
         $status = $order->delete();
-        return redirect(route('orders'));
+        return redirect(route('orders'))->with('delete', '訂單已刪除');
     }
 }

@@ -1,6 +1,17 @@
 @extends('../user.index')
 
 @section('content')
+<!-- Alert User -->
+@if(Session::has('success'))
+<div class="alert alert-success">
+    {{Session::get('success')}}
+</div>
+@elseif (Session::has('delete'))
+<div class="alert alert-danger">
+    {{Session::get('delete')}}
+</div>
+@endif
+
 @if (count($cartItems) > 0)
     <table class="table table-striped">
         <thead>

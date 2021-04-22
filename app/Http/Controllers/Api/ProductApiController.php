@@ -9,6 +9,7 @@ use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProductApiController extends Controller
 {
@@ -18,6 +19,11 @@ class ProductApiController extends Controller
     private $service;
 
     /**
+    * @var JWTAuth
+    */
+    protected $user;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -25,6 +31,7 @@ class ProductApiController extends Controller
     public function __construct(ProductService $service)
     {
         $this->service = $service;
+        $this->user = JWTAuth::parseToken()->authenticate();
     }
 
     public function index()
@@ -137,7 +144,7 @@ class ProductApiController extends Controller
             throw new APIException('查無對應產品', 404);
         }
 
-        \Cart::session(auth()->id())->remove($productId);
+        \Cart::session($this->user->id)->remove($productId);
 
         $status = $product->delete();
         return ['message' => $status];

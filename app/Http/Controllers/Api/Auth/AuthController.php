@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -24,11 +27,10 @@ class AuthController extends Controller
             'role' => User::ROLE_USER,
         ]);
 
-        $token = $user->createToken('my-app-token')->plainTextToken;
-
-        return response([
-            'user' => $user,
-            'token' => $token,
+        return response()->json([
+            'success' => true,
+            'message' => '使用者註冊成功',
+            'data' => $user,
         ], 201);
     }
 
@@ -39,29 +41,66 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        $user = User::where('email', $data['email'])->first();
-
-        if (! $user || ! Hash::check($data['password'], $user->password)) {
-            return response([
-                'message' => '驗證錯誤'
-            ], 401);
+        //Request is validated
+        //Crean token
+        try {
+            if (! $token = JWTAuth::attempt($data)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => '登入驗證錯誤',
+                ], 400);
+            }
+        } catch (JWTException $e) {
+            return response()->json([
+                    'success' => false,
+                    'message' => '無法創建令牌',
+                ], 500);
         }
 
-        $token = $user->createToken('my-app-token')->plainTextToken;
-
-        return response([
+        return response()->json([
             'success' => true,
-            'user' => $user,
             'token' => $token,
-        ], 201);
+        ], 200);
     }
 
     public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        //valid credential
+        $validator = Validator::make($request->only('token'), [
+            'token' => 'required'
+        ]);
 
-        return [
-            'message' => 'Logged out!'
-        ];
+        //Send failed response if request is not valid
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->messages
+            ], 422);
+        }
+
+        //Request is validated, do logout
+        try {
+            JWTAuth::invalidate($request->token);
+
+            return response()->json([
+                'success' => true,
+                'message' => '使用者已登出'
+            ]);
+        } catch (JWTException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => '抱歉，伺服器出現錯誤'
+            ], 500);
+        }
+    }
+
+    public function getUser(Request $request)
+    {
+        $this->validate($request, [
+            'token' => 'required'
+        ]);
+
+        $user = JWTAuth::authenticate($request->token);
+
+        return response()->json(['user' => $user], 200);
     }
 }

@@ -1,6 +1,13 @@
 @extends('../layouts.app')
 
 @section('content')
+<!-- Alert User -->
+@if(Session::has('success'))
+<div class="alert alert-success">
+    {{Session::get('success')}}
+</div>
+@endif
+
 <div class="purchase overflow-auto">
     <!--<div style="min-width: 600px">-->
         <header>
@@ -12,14 +19,16 @@
         </header>
         <main>
             <div class="row">
-                <div class="col-sm-3 col-xs-3 to-details">
+                <div class="col-sm-6 col-xs-6 to-details">
                     <div>訂單明細:</div>
                     <div class="to-name">買家：{{ $order->billing_name }}</div>
+                    <div class="to-email">電子信箱：{{ $order->billing_email }}</div>
                     <div class="to-address">地址：{{ $order->billing_address }}</div>
                 </div>
-                <div class="col-sm-9 col-xs-9 purchase-info">
+                <div class="col-sm-6 col-xs-6 purchase-info">
                     <div class="info-date">下單時間 : {{ $order->created_at}}</div>
-                    <div class="">狀態：{{ $order->status }}</div>
+                    <div class="info-status">狀態：{{ $order->status }}</div>
+                    <div class="info-payment">付款方式：{{ $order->payment }}</div>
                 </div>
             </div>
             <div class="row">
@@ -67,6 +76,7 @@
         </main>
     <!--</div>-->
     <div class="row">
+        @if ($order->status === '訂單已送出')
         <div class="col-1">
             <form method="post" action="/orders/{{ $order->id }}">
                 @csrf
@@ -76,6 +86,7 @@
                 </div>
             </form>
         </div>
+        @elseif ($order->status === '貨物已領取')
         <div class="col-1">
             <form method="post" action="/orders/{{ $order->id }}">
                 @csrf
@@ -85,6 +96,7 @@
                 </div>
             </form>
         </div>
+        @elseif ($order->status === '訂單完成')
         <div class="col-1">
             <form method="post" action="/orders/{{ $order->id }}">
                 @csrf
@@ -94,6 +106,7 @@
                 </div>
             </form>
         </div>
+        @endif
         <div class="col-1">
             <a type="button" class="btn btn-secondary" href="{{ route('orders') }}">返回</a>
         </div>

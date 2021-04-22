@@ -10,6 +10,13 @@
         </a>
       </li>
 
+      <li class="nav-item mr-auto">
+        <a class="nav-link" href="{{ route('contact') }}">
+          <i class="fas fa-paper-plane"></i>
+          聯絡我們
+        </a>
+      </li>
+
       @cannot('manager')
       <li class="nav-item mr-auto">
         <a class="nav-link " href="{{ route('cart') }}">
