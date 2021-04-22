@@ -67,6 +67,7 @@
         </main>
     <!--</div>-->
     <div class="row">
+        @if ($order->status === '訂單已送出')
         <div class="col-1">
             <form method="post" action="/orders/{{ $order->id }}">
                 @csrf
@@ -76,6 +77,7 @@
                 </div>
             </form>
         </div>
+        @elseif ($order->status === '貨物已領取')
         <div class="col-1">
             <form method="post" action="/orders/{{ $order->id }}">
                 @csrf
@@ -85,6 +87,7 @@
                 </div>
             </form>
         </div>
+        @elseif ($order->status === '訂單完成')
         <div class="col-1">
             <form method="post" action="/orders/{{ $order->id }}">
                 @csrf
@@ -94,6 +97,7 @@
                 </div>
             </form>
         </div>
+        @endif
         <div class="col-1">
             <a type="button" class="btn btn-secondary" href="{{ route('orders') }}">返回</a>
         </div>

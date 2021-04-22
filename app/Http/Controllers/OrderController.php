@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends Controller
 {
     /**
-     * @var OrderService
-     */
-    private $service;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -27,13 +22,13 @@ class OrderController extends Controller
     public function __construct(OrderService $service)
     {
         $this->service = $service;
-        $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     /**
-     * Show all Cart.
+     * Show all Orders.
      *
-     * @return
+     * @return view
      */
     public function index()
     {
@@ -51,6 +46,12 @@ class OrderController extends Controller
         );
     }
 
+    /**
+     * Show the OrderDetail.
+     *
+     * @param $orderId
+     * @return view
+     */
     public function orderDetail($orderId)
     {
         if (Gate::allows('user')) {
@@ -70,9 +71,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Show all Cart.
+     * Show this Order.
      *
-     * @return
+     * @return view
      */
     public function checkout()
     {
@@ -106,8 +107,7 @@ class OrderController extends Controller
     * Store the Order.
     *
     * @param Request $request
-    * @return \Illuminate\Http\JsonResponse
-    * @throws APIException
+    * @return view
     */
     public function store(Request $request)
     {
@@ -157,6 +157,12 @@ class OrderController extends Controller
         return redirect(route('orders'));
     }
 
+    /**
+     * Update the Order.
+     *
+     * @param Request $request, $orderId
+     * @return view
+     */
     public function update(Request $request, $orderId)
     {
         if (! $order = Order::find($orderId)) {
@@ -168,9 +174,20 @@ class OrderController extends Controller
         ];
 
         $status = $order->update($orderForm);
-        return redirect(route('orders'));
+
+        if (Gate::allows('user')) {
+            return redirect(route('user.order.detail', $orderId));
+        }
+
+        return redirect(route('orders.detail', $orderId));
     }
 
+    /**
+     * Delete the Order.
+     *
+     * @param $orderId
+     * @return view
+     */
     public function destroy($orderId)
     {
         if (! $order = Order::find($orderId)) {

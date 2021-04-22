@@ -21,16 +21,25 @@
                 <h6 class="heading-small text-muted mb-4">使用者資訊</h6>
                 <div class="pl-lg-4">
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-username">使用者名稱</label>
-                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="{{ $user->name }}" name="name">
+                        <input type="text" id="input-username" class="form-control form-control-alternative" value="{{ $user->name }}" name="name">
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-new-password">新密碼</label>
+                        <input type="password" id="input-new-password-confirmation" class="form-control form-control-alternative" placeholder="新密碼" name="new_password">
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group">
-                        <label class="form-control-label" for="input-email">Email</label>
-                        <input type="email" id="input-email" class="form-control form-control-alternative" placeholder="{{ $user->email }}" name="email">
+                        <label class="form-control-label" for="input-new-password-confirmation">確認新密碼</label>
+                        <input type="password" id="input-new-password-confirmation" class="form-control form-control-alternative" placeholder="確認密碼" name="new_password_confirmation">
                       </div>
                     </div>
                   </div>

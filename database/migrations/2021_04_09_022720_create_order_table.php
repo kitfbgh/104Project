@@ -17,6 +17,7 @@ class CreateOrderTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('status')->nullable();
+            $table->string('payment');
             $table->string('billing_email');
             $table->string('billing_address');
             $table->string('billing_name');

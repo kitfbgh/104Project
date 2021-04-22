@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -19,9 +20,14 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('verified');
     }
 
+    /**
+     * Show all the Product.
+     * 
+     * @return view
+     */
     public function index()
     {
         if (Gate::allows('user')) {
@@ -35,6 +41,12 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Show User's Order.
+     *
+     * @param $userId
+     * @return view
+     */
     public function order($userId)
     {
         if (Auth::user()->id != $userId) {
@@ -50,6 +62,12 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Show the orderDetail.
+     *
+     * @param $orderId
+     * @return view
+     */
     public function orderDetail($orderId)
     {
         if (! $order = Order::find($orderId)) {
@@ -66,6 +84,11 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Show User Profile.
+     *
+     * @return view
+     */
     public function profile()
     {
         $user = User::find(Auth::user()->id);
@@ -75,6 +98,12 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Show the ProductDetail.
+     *
+     * @param $productId
+     * @return view
+     */
     public function productDetail($productId)
     {
         if (! $product = Product::find($productId)) {
@@ -86,20 +115,31 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Update the User.
+     *
+     * @param Request $request, $userId
+     * @return view
+     */
     public function update(Request $request, $userId)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'email' => 'string|email|max:255',
+            'name' => 'string|max:255|required',
+            'new_password' => 'string|min:8',
+            'new_password_confirmation' => 'string|min:8',
         ]);
+
+        if ($validator->fails() || $request->new_password !== $request->new_password_confirmation) {
+            abort(422, '驗證錯誤');
+        }
 
         if (! $user = User::find($userId)) {
             abort(404);
         }
 
         $userForm = [
-            'name' => $request->name ?? $user->name,
-            'email' => $request->email ?? $user->email,
+            'name' => $request->name,
+            'password' => Hash::make($request->new_password) ?? $user->password,
         ];
 
         $status = $user->update($userForm);
@@ -107,6 +147,12 @@ class UserController extends Controller
         return redirect(route('user.profile'));
     }
 
+    /**
+     * Delete the Product.
+     *
+     * @param $userId
+     * @return view
+     */
     public function destroy($userId)
     {
         if (! $user = User::find($userId)) {

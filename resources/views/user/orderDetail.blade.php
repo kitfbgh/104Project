@@ -67,6 +67,17 @@
         </main>
     <!--</div>-->
     <div class="row">
+        @if ($order->status === '運送中')
+        <div class="col-1">
+            <form method="post" action="/orders/{{ $order->id }}">
+                @csrf
+                @method('PATCH')
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success " name="status" value="貨物已領取">領取</button>
+                </div>
+            </form>
+        </div>
+        @endif
         <div class="col-1">
             <a type="button" class="btn btn-secondary" href="{{ route('user.orders', Auth::user()->id) }}">返回</a>
         </div>

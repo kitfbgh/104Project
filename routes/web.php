@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 $namespace = 'App\\Http\\Controllers\\';
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/dashboard', ['uses' => $namespace . 'DashboardController@index', 'as' => 'dashboard']);
 Route::get('/users', ['uses' => $namespace . 'UserController@index', 'as' => 'users']);

@@ -43,7 +43,7 @@ class RegisterController extends Controller
                 return RouteServiceProvider::DASHBOARD;
                 break;
             case 'user':
-                return RouteServiceProvider::HOME;
+                return '/login';
                 break;
             default:
                 return '/login';

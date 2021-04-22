@@ -180,7 +180,7 @@ class OrderController extends Controller
         }
         \Cart::session(auth()->id())->clear();
 
-        if (Auth::user()->role == 'user') {
+        if (Gate::allows('user')) {
             return redirect(route('user.orders', Auth::user()->id));
         }
 
@@ -198,6 +198,11 @@ class OrderController extends Controller
         ];
 
         $status = $order->update($orderForm);
+
+        if (Gate::allows('user')) {
+            return redirect(route('user.orders', Auth::user()->id));
+        }
+
         return redirect(route('orders'));
     }
 

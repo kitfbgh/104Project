@@ -7,10 +7,8 @@
         <div class="row justify-content-center">
           <div class="col-md-9">
             <div class="container row justify-content-around">
-              <div class="col-md-3 p-2 rounded-pill alert-success text-center">1.填寫訂購資料</div>
-              <div class="col-md-3 p-2 rounded-pill alert-secondary text-center my-3 my-md-0">2.金流付款</div>
-              <div class="col-md-3 p-2 rounded-pill alert-secondary text-center">3.訂單完成</div>
-            </div>
+              <div class="col-md-4 p-2 rounded-pill alert-success text-center">填寫訂購資料</div>
+             </div>
           </div>
           <div class="col-md-6 mt-5">
             <table class="table table-hover">
@@ -67,6 +65,16 @@
               <input type="hidden" name="status" value="訂單已送出"/>
               <input type="hidden" name="userId" value="{{ $userId }}"/>
             <div class="form-group">
+              <label for="payment">
+                付款方式
+                <span class="text-danger">*必填</span>
+              </label>
+              <select id="payment" name="payment" class="form-control" size="1" required>
+                <option disabled selected value="" hidden>付款方式</option>
+                <option value="貨到付款">貨到付款</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="userEmail">
                 Email
                 <span class="text-danger">*必填</span>
@@ -104,17 +112,15 @@
                 class="form-control"
                 id="usertel"
                 name="tel"
-                placeholder="請輸入10位數電話 (XXX-XXX-XXXX)"
+                placeholder="請輸入10位數電話 (XXXXXXXXXX)"
                 minlength="10"
                 list="defaultTels"
-                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                pattern="[0-9]{10}"
                 required
               />
               <datalist id="defaultTels">
-                <option value="111-111-1111">
-                <option value="122-222-2222">
-                <option value="333-333-3333">
-                <option value="344-444-4444">
+                <option value="1111111111">
+                <option value="1222222222">
               </datalist>
             </div>
             <div class="form-group">
