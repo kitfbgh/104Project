@@ -12,14 +12,16 @@
         </header>
         <main>
             <div class="row">
-                <div class="col-sm-3 col-xs-3 to-details">
+                <div class="col-sm-6 col-xs-6 to-details">
                     <div>訂單明細:</div>
                     <div class="to-name">買家：{{ $order->billing_name }}</div>
+                    <div class="to-email">電子信箱：{{ $order->billing_email }}</div>
                     <div class="to-address">地址：{{ $order->billing_address }}</div>
                 </div>
-                <div class="col-sm-9 col-xs-9 purchase-info">
+                <div class="col-sm-6 col-xs-6 purchase-info">
                     <div class="info-date">下單時間 : {{ $order->created_at}}</div>
-                    <div class="">狀態：{{ $order->status }}</div>
+                    <div class="info-status">狀態：{{ $order->status }}</div>
+                    <div class="info-payment">付款方式：{{ $order->payment }}</div>
                 </div>
             </div>
             <div class="row">

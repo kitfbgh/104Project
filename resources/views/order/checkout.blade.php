@@ -33,9 +33,6 @@
                   </td>
                   <td class="align-middle">
                     {{ $item->name }}
-                    <!-- <div class="text-success" v-if="item.coupon">
-                                已套用優惠券
-                    </div>-->
                   </td>
                   <td class="align-middle">{{ $item->quantity }}/{{ $item->attributes->unit }}</td>
                   <td class="align-middle">{{ $item->price }}</td>

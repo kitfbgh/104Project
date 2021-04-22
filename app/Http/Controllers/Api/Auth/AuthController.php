@@ -46,14 +46,14 @@ class AuthController extends Controller
         try {
             if (! $token = JWTAuth::attempt($data)) {
                 return response()->json([
-                	'success' => false,
-                	'message' => '登入驗證錯誤',
+                    'success' => false,
+                    'message' => '登入驗證錯誤',
                 ], 400);
             }
         } catch (JWTException $e) {
             return response()->json([
-                	'success' => false,
-                	'message' => '無法創建令牌',
+                    'success' => false,
+                    'message' => '無法創建令牌',
                 ], 500);
         }
 
@@ -80,7 +80,7 @@ class AuthController extends Controller
         //Request is validated, do logout
         try {
             JWTAuth::invalidate($request->token);
- 
+
             return response()->json([
                 'success' => true,
                 'message' => '使用者已登出'
@@ -98,9 +98,9 @@ class AuthController extends Controller
         $this->validate($request, [
             'token' => 'required'
         ]);
- 
+
         $user = JWTAuth::authenticate($request->token);
- 
+
         return response()->json(['user' => $user], 200);
     }
 }

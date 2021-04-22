@@ -46,12 +46,12 @@ Route::delete('orders/{orderId}', ['uses' => $namespace . 'OrderController@destr
 
 Route::get('orders/user/{userId}', ['uses' => $namespace . 'UserController@order', 'as' => 'user.orders']);
 Route::get(
-    'orders/{orderId}/detail',
+    'orders/{order}/detail',
     [
         'uses' => $namespace . 'UserController@orderDetail',
         'as' => 'user.order.detail'
     ]
 );
-Route::get('products/{productId}', ['uses' => $namespace . 'UserController@productDetail', 'as' => 'products.detail']);
+Route::get('products/{product}', ['uses' => $namespace . 'UserController@productDetail', 'as' => 'products.detail']);
 Route::get('profile', ['uses' => $namespace . 'UserController@profile', 'as' => 'user.profile']);
 Route::patch('profile/{userId}', ['uses' => $namespace . 'UserController@update', 'as' => 'user.profile.update']);

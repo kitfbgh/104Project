@@ -36,7 +36,7 @@ class OrderController extends Controller
             return redirect(route('welcome'));
         }
 
-        $orders = Order::all();
+        $orders = Order::simplePaginate(10);
         return view(
             'order.index',
             compact('orders'),
@@ -116,10 +116,10 @@ class OrderController extends Controller
             'name' => 'required|string|max:30',
             'tel' => 'required|string|min:10',
             'address' => 'required|string|max:60',
+            'payment' => 'required|string|max:30',
         ]);
 
         if ($validator->fails()) {
-            //$messages = $validator->errors()->getMessages();
             abort(422, '驗證錯誤');
         }
 
@@ -134,6 +134,7 @@ class OrderController extends Controller
             'billing_total' => (float) $request->get('total'),
             'status' => $request->get('status'),
             'user_id' => $request->get('userId'),
+            'payment' => $request->get('payment'),
         ];
 
         $orderId = Order::create($orderForm)->id;

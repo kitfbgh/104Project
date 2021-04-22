@@ -25,7 +25,7 @@ class UserController extends Controller
 
     /**
      * Show all the Product.
-     * 
+     *
      * @return view
      */
     public function index()
@@ -34,7 +34,7 @@ class UserController extends Controller
             return redirect(route('welcome'));
         }
 
-        $users = User::all();
+        $users = User::simplePaginate(10);
         return view(
             'users',
             compact('users'),
