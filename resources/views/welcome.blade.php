@@ -28,6 +28,7 @@
         </div>
     </div>
     @endforeach
+    {{ $products->links("pagination::simple-bootstrap-4") }}
 </div>
 @endif
 @endsection

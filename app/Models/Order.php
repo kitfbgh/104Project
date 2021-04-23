@@ -22,6 +22,7 @@ class Order extends Model
         'billing_tax',
         'comment',
         'user_id',
+        'payment',
     ];
 
     public function user()

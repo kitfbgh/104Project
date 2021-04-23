@@ -1,6 +1,13 @@
 @extends('../layouts.app')
 
 @section('content')
+<!-- Alert User -->
+@if(Session::has('success'))
+<div class="alert alert-success">
+    {{Session::get('success')}}
+</div>
+@endif
+
 @if (count($cartItems) > 0)
     <table class="table table-striped">
         <thead>

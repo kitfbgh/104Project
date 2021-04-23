@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Alert User -->
+@if(Session::has('success'))
+<div class="alert alert-success">
+    {{Session::get('success')}}
+</div>
+@elseif (Session::has('delete'))
+<div class="alert alert-danger">
+    {{Session::get('delete')}}
+</div>
+@endif
+
+<div>
 <table class="table table-striped">
     <thead class="table-dark">
         <tr>
@@ -33,4 +45,6 @@
         @endforeach
     </tbody>
 </table>
+{{ $users->links("pagination::simple-bootstrap-4") }}
+</div>
 @endsection

@@ -152,10 +152,10 @@ class OrderController extends Controller
         \Cart::session(auth()->id())->clear();
 
         if (Auth::user()->role == 'user') {
-            return redirect(route('user.orders', Auth::user()->id));
+            return redirect(route('user.orders', Auth::user()->id))->with('success', '訂單新增成功');
         }
 
-        return redirect(route('orders'));
+        return redirect(route('orders'))->with('success', '訂單新增成功');
     }
 
     /**
@@ -177,10 +177,10 @@ class OrderController extends Controller
         $status = $order->update($orderForm);
 
         if (Gate::allows('user')) {
-            return redirect(route('user.order.detail', $orderId));
+            return redirect(route('user.order.detail', $orderId))->with('success', '訂單狀態已更新');
         }
 
-        return redirect(route('orders.detail', $orderId));
+        return redirect(route('orders.detail', $orderId))->with('success', '訂單狀態已更新');
     }
 
     /**
@@ -202,6 +202,6 @@ class OrderController extends Controller
         }
         $order->products()->detach();
         $status = $order->delete();
-        return redirect(route('orders'));
+        return redirect(route('orders'))->with('delete', '訂單已刪除');
     }
 }

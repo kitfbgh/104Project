@@ -79,7 +79,7 @@ class CartController extends Controller
                 'associatedModel' => $product,
             ));
         }
-        return redirect(route('cart'));
+        return redirect(route('cart'))->with('success', '成功加入購物車');
     }
 
     public function update($productId)
@@ -92,7 +92,7 @@ class CartController extends Controller
                 )
             ]);
         }
-        return redirect(route('cart'));
+        return redirect(route('cart'))->with('success', '購物車已更新');
     }
 
     /**
@@ -105,6 +105,6 @@ class CartController extends Controller
     {
         \Cart::session(auth()->id())->remove($productId);
 
-        return redirect(route('cart'));
+        return redirect(route('cart'))->with('delete', '商品已從購物車移除');
     }
 }

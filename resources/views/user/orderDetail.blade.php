@@ -1,6 +1,13 @@
 @extends('../user.index')
 
 @section('content')
+<!-- Alert User -->
+@if(Session::has('success'))
+<div class="alert alert-success">
+    {{Session::get('success')}}
+</div>
+@endif
+
 <div class="purchase overflow-auto">
     <!--<div style="min-width: 600px">-->
         <header>

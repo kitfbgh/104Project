@@ -94,7 +94,7 @@ class ProductController extends Controller
 
         Product::create($productForm);
 
-        return redirect(route('products'));
+        return redirect(route('products'))->with('success', '產品新增成功');
     }
 
     /**
@@ -151,7 +151,7 @@ class ProductController extends Controller
 
         $status = $product->update($productForm);
 
-        return redirect(route('products'));
+        return redirect(route('products'))->with('success', '產品更新成功');
     }
 
     /**
@@ -169,6 +169,6 @@ class ProductController extends Controller
         \Cart::session(auth()->id())->remove($productId);
 
         $status = $product->delete();
-        return redirect(route('products'));
+        return redirect(route('products'))->with('delete', '產品已刪除');
     }
 }

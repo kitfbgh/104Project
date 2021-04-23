@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactUsController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -55,3 +56,6 @@ Route::get(
 Route::get('products/{product}', ['uses' => $namespace . 'UserController@productDetail', 'as' => 'products.detail']);
 Route::get('profile', ['uses' => $namespace . 'UserController@profile', 'as' => 'user.profile']);
 Route::patch('profile/{userId}', ['uses' => $namespace . 'UserController@update', 'as' => 'user.profile.update']);
+
+Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact');
+Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact.store');

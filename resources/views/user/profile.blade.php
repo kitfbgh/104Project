@@ -1,6 +1,13 @@
 @extends('../user.index')
 
 @section('content')
+<!-- Alert User -->
+@if(Session::has('success'))
+<div class="alert alert-success">
+    {{Session::get('success')}}
+</div>
+@endif
+
 <div class="main-content">
     <div class="container mt-7">
       <!-- Table -->

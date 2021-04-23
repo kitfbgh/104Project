@@ -125,11 +125,10 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'string|max:255|required',
-            'new_password' => 'string|min:8',
-            'new_password_confirmation' => 'string|min:8',
+            'new_password' => 'string|min:8|confirmed|nullable',
         ]);
 
-        if ($validator->fails() || $request->new_password !== $request->new_password_confirmation) {
+        if ($validator->fails()) {
             abort(422, '驗證錯誤');
         }
 
@@ -144,7 +143,7 @@ class UserController extends Controller
 
         $status = $user->update($userForm);
 
-        return redirect(route('user.profile'));
+        return redirect(route('user.profile'))->with('success', '使用者資訊成功更新');
     }
 
     /**
@@ -161,6 +160,6 @@ class UserController extends Controller
 
         $status = $user->delete();
 
-        return redirect(route('users'));
+        return redirect(route('users'))->with('delete', '使用者已刪除');
     }
 }
