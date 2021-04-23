@@ -76,6 +76,7 @@ class UserTest extends TestCase
             'billing_subtotal' => '0',
             'billing_total' => '0',
             'billing_tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $response = $this->call('GET', '/orders/1/detail');
         $this->assertEquals(200, $response->status());

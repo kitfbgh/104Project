@@ -52,6 +52,7 @@ class OrderTest extends TestCase
             'billing_subtotal' => '0',
             'billing_total' => '0',
             'billing_tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $response = $this->call('GET', '/orders/order/1');
         $this->assertEquals(200, $response->status());
@@ -69,6 +70,7 @@ class OrderTest extends TestCase
             'billing_subtotal' => '0',
             'billing_total' => '0',
             'billing_tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $response = $this->call('GET', '/orders/order/2');
         $this->assertEquals(302, $response->status());
@@ -104,6 +106,7 @@ class OrderTest extends TestCase
             'subTotal' => '0',
             'total' => '0',
             'tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/orders/user/1');
@@ -118,6 +121,7 @@ class OrderTest extends TestCase
             'subTotal' => '0',
             'total' => '0',
             'tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/orders');
@@ -125,6 +129,7 @@ class OrderTest extends TestCase
 
     public function testStoreFaild()
     {
+        // test user access
         $this->demoUserLoginIn();
         $response = $this->call('POST', '/orders', [
             'billing_phone' => '1231231231',
@@ -139,6 +144,8 @@ class OrderTest extends TestCase
 
     public function testUpdateSuccess()
     {
+        // test user access
+        $this->demoUserLoginIn();
         Order::create([
             'billing_email' => 'test@test.com',
             'billing_name' => 'test',
@@ -148,12 +155,21 @@ class OrderTest extends TestCase
             'billing_subtotal' => '0',
             'billing_total' => '0',
             'billing_tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $response = $this->call('PATCH', '/orders/1', [
             'status' => 'test',
         ]);
         $this->assertEquals(302, $response->status());
-        $response->assertRedirect('/orders');
+        $response->assertRedirect('/orders/1/detail');
+
+        // test admin access
+        $this->demoAdminLoginIn();
+        $response = $this->call('PATCH', '/orders/1', [
+            'status' => 'test1',
+        ]);
+        $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/orders/order/1');
     }
 
     public function testUpdateFaild()
@@ -175,6 +191,7 @@ class OrderTest extends TestCase
             'billing_subtotal' => '0',
             'billing_total' => '0',
             'billing_tax' => '0',
+            'payment' => '貨到付款',
         ]);
         $response = $this->call('DELETE', '/orders/1');
         $this->assertEquals(302, $response->status());
