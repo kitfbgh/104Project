@@ -22,7 +22,7 @@ before_script:
   - php artisan migrate
 
 script:
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-text
   # Search for PHP syntax errors.
   - find -L . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
   - vendor/bin/phpcs
