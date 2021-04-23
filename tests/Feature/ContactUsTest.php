@@ -15,17 +15,17 @@ class ContactUsTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
-    public function testStoreSuccess()
-    {
-        $response = $this->call('POST', '/contact-us', [
-            'name' => 'test',
-            'email' => 'test@test.com',
-            'phone' => '1111111111',
-            'subject' => 'test',
-            'message' => 'test',
-        ]);
-        $this->assertEquals(302, $response->status());
-    }
+    // public function testStoreSuccess()
+    // {
+    //     $response = $this->call('POST', '/contact-us', [
+    //         'name' => 'test',
+    //         'email' => 'test@test.com',
+    //         'phone' => '1111111111',
+    //         'subject' => 'test',
+    //         'message' => 'test',
+    //     ]);
+    //     $this->assertEquals(302, $response->status());
+    // }
 
     public function testStoreFaild()
     {
