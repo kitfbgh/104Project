@@ -1,0 +1,1 @@
+make: sudo php artisan storage:link
