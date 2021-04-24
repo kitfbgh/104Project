@@ -4,7 +4,7 @@
 <br><br><br>
 <div class="row">
     <div class="col-sm-6 push-bit">
-        <a href="#" class="gallery-link"><img src="{{ $product->imageUrl ?? asset('storage/' . $product->image) }}" style="width: 500px;height: 500px;" alt="" class="img-responsive push-bit" /></a>
+        <a href="#" class="gallery-link"><img src="{{ $product->imageUrl }}" style="width: 500px;height: 500px;" alt="" class="img-responsive push-bit" /></a>
     </div>
     <div class="col-sm-6 push-bit">
         <div class="clearfix">

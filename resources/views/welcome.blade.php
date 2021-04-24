@@ -8,7 +8,7 @@
     <div class="col-md-3">
         <div class="ibox">
             <div class="ibox-content product-box">
-                    <img src="{{ $product->imageUrl ?? asset('storage/' . $product->image) }}" style="width: 200px;height: 200px;" alt="{{ $product['name'] }}">
+                    <img src="{{ $product->imageUrl }}" style="width: 200px;height: 200px;" alt="{{ $product['name'] }}">
                 <div class="product-desc">
                     <span class="product-price">
                         ${{ $product->price }}
