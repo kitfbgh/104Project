@@ -30,7 +30,7 @@
                 <td scope="row"><img style="height: 100px;width: 100px;" src="{{ $item->attributes->imageUrl }}" alt="{{ $item->name }}"></td>
                 <td>{{ $item->name }}</td>
                 <td>
-                    $ {{ Cart::session(auth()->id())->get($item->id)->getPriceSum() }}
+                    NT$ {{ Cart::session(auth()->id())->get($item->id)->getPriceSum() }}
                 </td>
                 <td>
                     <form action="{{ route('cart.update', $item->id) }}">
@@ -47,8 +47,8 @@
             @endforeach
         </tbody>
     </table>
-    <h3>小計 : $ {{ $subTotal }}</h3>
-    <h3>總計 : $ {{ $total }}</h3>
+    <h3>小計 : NT$ {{ $subTotal }}</h3>
+    <h3>總計 : NT$ {{ $total }}</h3>
     <a type="button" class="btn btn-secondary" href="{{ route('welcome') }}">繼續購物</a>
     <a role="button" class="btn btn-primary" href="{{ route('orders.checkout') }}">結帳去！</a>    
 @else

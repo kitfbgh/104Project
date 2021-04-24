@@ -9,17 +9,18 @@
     <div class="col-sm-6 push-bit">
         <div class="clearfix">
             <div class="pull-right">
-                <span class="h2"><strong>$ {{ $product->price }}</strong></span>
+                <span class="h2"><strong>NT$ {{ $product->price }}</strong></span>
             </div>
             <span class="h4">
                 <strong class="text-success">{{ $product->name }}</strong><br />
-                <small>{{ $product->quantity }} {{ $product->unit }}</small>
+                <small>庫存：{{ $product->quantity }} {{ $product->unit }}</small>
             </span>
         </div>
         <hr />
         <pre>
             {{ $product->description }}
         </pre>
+        <hr>
         <pre>
             {{ $product->content }}
         </pre>

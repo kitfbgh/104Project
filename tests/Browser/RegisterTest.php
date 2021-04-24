@@ -40,7 +40,7 @@ class RegisterTest extends DuskTestCase
                 ->type('password', 'password')
                 ->type('password_confirmation', 'password')
                 ->press('註冊')
-                ->assertPathIs('/');
+                ->assertPathIs('/register');
         });
 
         $this->assertDatabaseHas('users', [

@@ -35,19 +35,19 @@
                     {{ $item->name }}
                   </td>
                   <td class="align-middle">{{ $item->quantity }}/{{ $item->attributes->unit }}</td>
-                  <td class="align-middle">{{ $item->price }}</td>
-                  <td class="align-middle">{{ Cart::session(auth()->id())->get($item->id)->getPriceSum() }}</td>
+                  <td class="align-middle">NT$ {{ $item->price }}</td>
+                  <td class="align-middle">NT$ {{ Cart::session(auth()->id())->get($item->id)->getPriceSum() }}</td>
                 </tr>
                 @endforeach
               </tbody>
               <tfoot>
                 <tr>
                   <td colspan="4" class="text-right">小計</td>
-                  <td class="text-right">{{ $subTotal }}</td>
+                  <td class="text-right">NT$ {{ $subTotal }}</td>
                 </tr>
                 <tr>
                   <td colspan="4" class="text-right text-success">總計</td>
-                  <td class="text-right text-success">{{ $total }}</td>
+                  <td class="text-right text-success">NT$ {{ $total }}</td>
                 </tr>
               </tfoot>
             </table>

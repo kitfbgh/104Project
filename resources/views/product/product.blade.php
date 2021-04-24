@@ -26,7 +26,6 @@
                 <div class="col-6">
                     <div class="card-body text-info">
                         <h5 class="card-title">名稱：{{ $product['name'] }}</h5>
-                        <p class="card-text">商品概述：{{ $product['description'] }}</p>
                         <p class="card-text">商品數量：{{ $product['quantity'] }} {{ $product['unit'] }}</p>
                         <p class="card-text">原價：${{ $product['origin_price'] }}   元 / {{ $product['unit'] }}</p>
                         <p class="card_text">售價：${{ $product['price'] }}   元 / {{ $product['unit'] }}</p>

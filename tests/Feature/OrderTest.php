@@ -43,17 +43,7 @@ class OrderTest extends TestCase
     public function testOrderDetailSuccess()
     {
         $this->demoAdminLoginIn();
-        Order::create([
-            'billing_email' => 'test@test.com',
-            'billing_name' => 'test',
-            'billing_phone' => '1231231231',
-            'billing_address' => 'test',
-            'user_id' => 4,
-            'billing_subtotal' => '0',
-            'billing_total' => '0',
-            'billing_tax' => '0',
-            'payment' => '貨到付款',
-        ]);
+        $order = factory(Order::class)->create();
         $response = $this->call('GET', '/orders/order/1');
         $this->assertEquals(200, $response->status());
     }
@@ -61,17 +51,7 @@ class OrderTest extends TestCase
     public function testOrderDetailFaild()
     {
         $this->demoUserLoginIn();
-        Order::create([
-            'billing_email' => 'test@test.com',
-            'billing_name' => 'test',
-            'billing_phone' => '1231231231',
-            'billing_address' => 'test',
-            'user_id' => 4,
-            'billing_subtotal' => '0',
-            'billing_total' => '0',
-            'billing_tax' => '0',
-            'payment' => '貨到付款',
-        ]);
+        $order = factory(Order::class)->create();
         $response = $this->call('GET', '/orders/order/2');
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/');
@@ -97,31 +77,32 @@ class OrderTest extends TestCase
     public function testStoreSuccess()
     {
         $this->demoUserLoginIn();
+        $order = factory(Order::class)->create();
         $response = $this->call('POST', '/orders', [
-            'email' => 'test@test.com',
-            'name' => 'test',
-            'tel' => '1231231231',
-            'address' => 'test',
-            'userId' => 8,
-            'subTotal' => '0',
-            'total' => '0',
-            'tax' => '0',
-            'payment' => '貨到付款',
+            'email' => $order->billing_email,
+            'name' => $order->billing_name,
+            'tel' => $order->billing_phone,
+            'address' => $order->billing_address,
+            'userId' => $order->user_id,
+            'subTotal' => $order->billing_subtotal,
+            'total' => $order->billing_total,
+            'tax' => $order->billing_tax,
+            'payment' => $order->payment,
         ]);
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/orders/user/1');
 
         $this->demoAdminLoginIn();
         $response = $this->call('POST', '/orders', [
-            'email' => 'test@test.com',
-            'name' => 'test',
-            'tel' => '1231231231',
-            'address' => 'test',
-            'userId' => 8,
-            'subTotal' => '0',
-            'total' => '0',
-            'tax' => '0',
-            'payment' => '貨到付款',
+            'email' => $order->billing_email,
+            'name' => $order->billing_name,
+            'tel' => $order->billing_phone,
+            'address' => $order->billing_address,
+            'userId' => $order->user_id,
+            'subTotal' => $order->billing_subtotal,
+            'total' => $order->billing_total,
+            'tax' => $order->billing_tax,
+            'payment' => $order->payment,
         ]);
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/orders');
@@ -146,17 +127,7 @@ class OrderTest extends TestCase
     {
         // test user access
         $this->demoUserLoginIn();
-        Order::create([
-            'billing_email' => 'test@test.com',
-            'billing_name' => 'test',
-            'billing_phone' => '1231231231',
-            'billing_address' => 'test',
-            'user_id' => 4,
-            'billing_subtotal' => '0',
-            'billing_total' => '0',
-            'billing_tax' => '0',
-            'payment' => '貨到付款',
-        ]);
+        $order = factory(Order::class)->create();
         $response = $this->call('PATCH', '/orders/1', [
             'status' => 'test',
         ]);
@@ -182,17 +153,7 @@ class OrderTest extends TestCase
 
     public function testDestroySuccess()
     {
-        Order::create([
-            'billing_email' => 'test@test.com',
-            'billing_name' => 'test',
-            'billing_phone' => '1231231231',
-            'billing_address' => 'test',
-            'user_id' => 4,
-            'billing_subtotal' => '0',
-            'billing_total' => '0',
-            'billing_tax' => '0',
-            'payment' => '貨到付款',
-        ]);
+        $order = factory(Order::class)->create();
         $response = $this->call('DELETE', '/orders/1');
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/orders');
