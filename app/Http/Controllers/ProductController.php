@@ -78,7 +78,6 @@ class ProductController extends Controller
             'description' => $request->get('description') ?? null,
             'content' => trim($request->get('content')) ?? '',
             'quantity' => intval($request->get('quantity')),
-            'imageUrl' => $request->get('imageUrl') ?? null,
             'size' => $request->get('size'),
         ];
 
@@ -86,10 +85,15 @@ class ProductController extends Controller
             $fileName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $request->image->extension();
             $imageName = time() . '.' . $extension;
-            $path = 'images';
-            $request->image->storeAs($path, $imageName, 'public');
+            $path = 'natz/images/';
+            Storage::disk('s3')->put($path . $imageName, file_get_contents($request->image));
+            $s3_path = Storage::disk('s3')->url('natz/images/' . $imageName);
 
-            $productForm['image'] = $path . '/' . $imageName;
+            $productForm['imageUrl'] = $s3_path;
+            $productForm['image'] = parse_url($s3_path, PHP_URL_PATH);
+        } elseif ($request->has('imageUrl')) {
+            $productForm['imageUrl'] = $request->get('imageUrl');
+            $productForm['image'] = null;
         }
 
         Product::create($productForm);
@@ -132,21 +136,29 @@ class ProductController extends Controller
             'description' => $request->get('description') ?? null,
             'content' => trim($request->get('content')) ?? '',
             'quantity' => intval($request->get('quantity')),
-            'imageUrl' => $request->get('imageUrl') ?? null,
             'size' => $request->get('size'),
         ];
 
         if ($request->has('image')) {
-            if ($product['image'] !== 'images/noimage.jpeg') {
-                File::delete('storage/' . $product['image']);
+            if ($product['image'] !== '/natz/images/noimage.jpeg') {
+                Storage::disk('s3')->delete($product['image']);
             }
             $fileName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $request->image->extension();
             $imageName = time() . '.' . $extension;
-            $path = 'images';
-            $request->image->storeAs($path, $imageName, 'public');
+            $path = 'natz/images/';
+            Storage::disk('s3')->put($path . $imageName, file_get_contents($request->image));
+            $s3_path = Storage::disk('s3')->url('natz/images/' . $imageName);
 
-            $productForm['image'] = $path . '/' . $imageName;
+            $productForm['imageUrl'] = $s3_path;
+            $productForm['image'] = parse_url($s3_path, PHP_URL_PATH);
+        } elseif ($request->has('imageUrl')) {
+            if ($product['image'] !== '/natz/images/noimage.jpeg') {
+                Storage::disk('s3')->delete($product['image']);
+            }
+
+            $productForm['imageUrl'] = $request->get('imageUrl');
+            $productForm['image'] = null;
         }
 
         $status = $product->update($productForm);

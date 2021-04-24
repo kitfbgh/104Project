@@ -21,7 +21,7 @@
         <div class="card border-info mb-3" style="max-width: 540px;" >
             <div class="row g-0">
                 <div class="col-4">
-                    <img src="{{ $product->imageUrl ?? asset('storage/' . $product->image) }}" class="card-img-top" style="height: 100%" alt="{{ $product['name'] }}">
+                    <img src="{{ $product->imageUrl }}" class="card-img-top" style="height: 100%" alt="{{ $product['name'] }}">
                 </div>
                 <div class="col-6">
                     <div class="card-body text-info">

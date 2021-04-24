@@ -24,8 +24,11 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->text('content')->nullable();
             $table->unsignedInteger('quantity');
-            $table->string('imageUrl')->nullable();
-            $table->string('image')->nullable()->default('images/noimage.jpeg');
+            $table->string('imageUrl')->nullable()
+                ->default(
+                    'https://104-aws-training-cicd-bucket.s3-ap-northeast-1.amazonaws.com/natz/images/noimage.jpeg'
+                );
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

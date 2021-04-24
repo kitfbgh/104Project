@@ -27,7 +27,7 @@
         <tbody>
             @foreach ($cartItems as $item)
             <tr>
-                <td scope="row"><img style="height: 100px;width: 100px;" src="{{ $item->attributes->imageUrl ?? asset('storage/' . $item->attributes->image) }}" alt="{{ $item->name }}"></td>
+                <td scope="row"><img style="height: 100px;width: 100px;" src="{{ $item->attributes->imageUrl }}" alt="{{ $item->name }}"></td>
                 <td>{{ $item->name }}</td>
                 <td>
                     $ {{ Cart::session(auth()->id())->get($item->id)->getPriceSum() }}
