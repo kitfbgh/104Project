@@ -153,7 +153,10 @@ class ProductController extends Controller
             $productForm['imageUrl'] = $s3_path;
             $productForm['image'] = parse_url($s3_path, PHP_URL_PATH);
         } elseif ($request->has('imageUrl')) {
-            if ($product['image'] !== '/natz/images/noimage.jpeg') {
+            if (
+                $product['image'] !== '/natz/images/noimage.jpeg'
+                && $request->get('imageUrl') !== $product['imageUrl']
+            ) {
                 Storage::disk('s3')->delete($product['image']);
             }
 
