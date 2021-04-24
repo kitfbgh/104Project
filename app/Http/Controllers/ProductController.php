@@ -178,7 +178,7 @@ class ProductController extends Controller
             abort(404);
         }
 
-        if ($product['image'] !== '/natz/images/noimage.jpeg') {
+        if ($product['image'] !== '/natz/images/noimage.jpeg' && $product['image'] != null) {
             Storage::disk('s3')->delete($product['image']);
         }
 
