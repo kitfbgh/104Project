@@ -5,9 +5,12 @@ php:
 
 env:
   - AWS_KEY=$AWS_ACCESS_KEY
-  - AWS_SECRET=$AWS_SECRET_KEY
-  - AWS_REGION="ap-northeast-1"
-  - AWS_BUCKET_NAME="104-aws-training-cicd-bucket"
+    AWS_SECRET=$AWS_SECRET_KEY
+    AWS_REGION="ap-northeast-1"
+    AWS_BUCKET_NAME="104-aws-training-cicd-bucket"
+    MAIL_USERNAME=$MAIL_USERNAME
+    MAIL_PASSWORD=$MAIL_PASSWORD
+    MAIL_FROM_ADDRESS=$MAIL_USERNAME
 
 branch:
   only:
