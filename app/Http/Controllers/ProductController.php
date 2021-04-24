@@ -178,6 +178,10 @@ class ProductController extends Controller
             abort(404);
         }
 
+        if ($product['image'] !== '/natz/images/noimage.jpeg') {
+            Storage::disk('s3')->delete($product['image']);
+        }
+
         \Cart::session(auth()->id())->remove($productId);
 
         $status = $product->delete();
