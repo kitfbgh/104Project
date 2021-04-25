@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\ContactUs;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -17,23 +18,23 @@ class ContactUsTest extends TestCase
 
     public function testStoreSuccess()
     {
+        $contact_us = factory(ContactUs::class)->create();
         $response = $this->call('POST', '/contact-us', [
-            'name' => 'test',
-            'email' => 'test@test.com',
-            'phone' => '1111111111',
-            'subject' => 'test',
-            'message' => 'test',
+            'name' => $contact_us->name,
+            'email' => $contact_us->email,
+            'phone' => $contact_us->phone,
+            'subject' => $contact_us->subject,
+            'message' => $contact_us->message,
         ]);
         $this->assertEquals(302, $response->status());
     }
 
     public function testStoreFaild()
     {
+        $contact_us = factory(ContactUs::class)->create();
         $response = $this->call('POST', '/contact-us', [
-            'name' => 'test',
-            'email' => 'test@test.com',
-            'subject' => 'test',
-            'message' => 'test',
+            'subject' => $contact_us->subject,
+            'message' => $contact_us->message,
         ]);
         $this->assertEquals(422, $response->status());
     }

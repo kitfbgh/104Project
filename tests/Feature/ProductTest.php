@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
@@ -42,13 +43,33 @@ class ProductTest extends TestCase
     public function testStoreSuccess()
     {
         $this->demoAdminLoginIn();
+        $product = factory(Product::class)->create();
         $response = $this->call('POST', '/products', [
-            'name' => 'testStore',
-            'price' => '123',
-            'quantity' => '123',
-            'category' => 'testStore',
-            'origin_price' => '123',
-            'unit' => '個',
+            'name' => $product->name,
+            'price' => $product->price,
+            'quantity' => $product->quantity,
+            'category' => $product->category,
+            'origin_price' => $product->origin_price,
+            'unit' => $product->unit,
+            'description' => $product->description,
+            'content' => $product->content,
+            'image' => UploadedFile::fake()->image('photo.jpeg', 500, 500)->size(1000),
+        ]);
+        $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/products');
+
+        $product = factory(Product::class)->create();
+        $response = $this->call('POST', '/products', [
+            'name' => $product->name,
+            'price' => $product->price,
+            'quantity' => $product->quantity,
+            'category' => $product->category,
+            'origin_price' => $product->origin_price,
+            'unit' => $product->unit,
+            'description' => $product->description,
+            'content' => $product->content,
+            'imageUrl' =>
+            'https://104-aws-training-cicd-bucket.s3-ap-northeast-1.amazonaws.com/natz/images/noimage.jpeg',
         ]);
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/products');
@@ -71,15 +92,7 @@ class ProductTest extends TestCase
     public function testUpdateSuccess()
     {
         $this->demoAdminLoginIn();
-        $product = Product::create([
-            'name' => 'testStoreSuccess',
-            'price' => '123',
-            'quantity' => '123',
-            'category' => 'testStore',
-            'origin_price' => '123',
-            'unit' => '個',
-        ]);
-
+        $product = factory(Product::class)->create();
         $response = $this->call('PATCH', '/products/1', [
             'name' => 'testStoreSuccess',
             'price' => '321',
@@ -87,6 +100,21 @@ class ProductTest extends TestCase
             'category' => 'testStore',
             'origin_price' => '123',
             'unit' => '個',
+            'image' => UploadedFile::fake()->image('photo.jpeg', 500, 500)->size(1000),
+        ]);
+        $this->assertEquals(302, $response->status());
+        $response->assertRedirect('/products');
+
+        $product = factory(Product::class)->create();
+        $response = $this->call('PATCH', '/products/1', [
+            'name' => 'testStoreSuccess',
+            'price' => '321',
+            'quantity' => '321',
+            'category' => 'testStore',
+            'origin_price' => '123',
+            'unit' => '個',
+            'imageUrl' =>
+            'https://104-aws-training-cicd-bucket.s3-ap-northeast-1.amazonaws.com/natz/images/noimage.jpeg',
         ]);
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/products');
@@ -95,14 +123,7 @@ class ProductTest extends TestCase
     public function testUpdateFaild()
     {
         $this->demoAdminLoginIn();
-        $product = Product::create([
-            'name' => 'testStoreFaild',
-            'price' => '123',
-            'quantity' => '123',
-            'category' => 'testStore',
-            'origin_price' => '123',
-            'unit' => '個',
-        ]);
+        $product = factory(Product::class)->create();
 
         $response = $this->call('PATCH', '/products/3', [
             'name' => 'testStoreFaild',
@@ -127,15 +148,19 @@ class ProductTest extends TestCase
     public function testDestroySuccess()
     {
         $this->demoAdminLoginIn();
-        $product = Product::create([
-            'name' => 'testDestroySuccess',
-            'price' => '123',
-            'quantity' => '123',
-            'category' => 'testStore',
-            'origin_price' => '123',
-            'unit' => '個',
+        $product = factory(Product::class)->create();
+        $this->call('POST', '/products', [
+            'name' => $product->name,
+            'price' => $product->price,
+            'quantity' => $product->quantity,
+            'category' => $product->category,
+            'origin_price' => $product->origin_price,
+            'unit' => $product->unit,
+            'description' => $product->description,
+            'content' => $product->content,
+            'image' => UploadedFile::fake()->image('photo.jpeg', 500, 500)->size(1000),
         ]);
-        $response = $this->call('DELETE', '/products/1');
+        $response = $this->call('DELETE', '/products/2');
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/products');
     }

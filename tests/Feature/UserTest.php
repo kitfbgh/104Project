@@ -45,14 +45,7 @@ class UserTest extends TestCase
     public function testUserOrderDetailSuccess()
     {
         $this->demoUserLoginIn();
-        $product = Product::create([
-            'name' => 'testDestroySuccess',
-            'price' => '123',
-            'quantity' => '123',
-            'category' => 'testStore',
-            'origin_price' => '123',
-            'unit' => '個',
-        ]);
+        $product = factory(Product::class)->create();
         // add the product to cart
         $data = \Cart::session(21)->add(array(
             'id' => $product->id,
@@ -67,17 +60,7 @@ class UserTest extends TestCase
             ),
             'associatedModel' => $product,
         ));
-        Order::create([
-            'billing_email' => 'test@test.com',
-            'billing_name' => 'test',
-            'billing_phone' => '1231231231',
-            'billing_address' => 'test',
-            'user_id' => 4,
-            'billing_subtotal' => '0',
-            'billing_total' => '0',
-            'billing_tax' => '0',
-            'payment' => '貨到付款',
-        ]);
+        $order = factory(Order::class)->create();
         $response = $this->call('GET', '/orders/1/detail');
         $this->assertEquals(200, $response->status());
     }
@@ -104,14 +87,7 @@ class UserTest extends TestCase
 
     public function testProductDetailSuccess()
     {
-        $product = Product::create([
-            'name' => 'testDestroySuccess',
-            'price' => '123',
-            'quantity' => '123',
-            'category' => 'testStore',
-            'origin_price' => '123',
-            'unit' => '個',
-        ]);
+        $product = factory(Product::class)->create();
         $response = $this->call('GET', '/products/1');
         $this->assertEquals(200, $response->status());
     }
