@@ -24,6 +24,7 @@
                     <div class="to-name">買家：{{ $order->billing_name }}</div>
                     <div class="to-email">電子郵件：{{ $order->billing_email }}</div>
                     <div class="to-address">地址：{{ $order->billing_address }}</div>
+                    <div class="to-tel">電話：{{ $order->billing_phone }}</div>
                 </div>
                 <div class="text-right col-sm-6 col-xs-6 purchase-info">
                     <div class="info-date">下單時間 : {{ $order->created_at}}</div>
