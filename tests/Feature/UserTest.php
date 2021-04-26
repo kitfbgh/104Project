@@ -140,7 +140,7 @@ class UserTest extends TestCase
             'name' => 'test123',
             'email' => 'test@test.com'
         ]);
-        $this->assertEquals(404, $response->status());
+        $this->assertEquals(500, $response->status());
     }
 
     /**
