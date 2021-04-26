@@ -19,7 +19,6 @@
           <form action="/products/{{ $product['id'] }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
-            <input type="hidden" name="userId" value="{{ $userId }}"/>
           <div class="modal-body">
             <div class="row">
               <div class="col-sm-4">

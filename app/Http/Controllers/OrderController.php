@@ -123,23 +123,36 @@ class OrderController extends Controller
             abort(422, '驗證錯誤');
         }
 
+        $cartItems = \Cart::session(auth()->id())->getContent();
+        $subTotal = \Cart::session(auth()->id())->getSubTotal();
+        $taxCondition = new \Darryldecode\Cart\CartCondition(array(
+            'name' => 'VAT 5%',
+            'type' => 'tax',
+            'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+            'value' => '5%',
+            'attributes' => array( // attributes field is optional
+                'description' => 'Value added tax',
+                'more_data' => 'more data here'
+            )
+        ));
+        $total = $subTotal + $taxCondition->getCalculatedValue($subTotal);
+
         $orderForm = [
             'billing_email' => $request->get('email'),
             'billing_address' => trim($request->get('address')),
             'billing_phone' => $request->get('tel'),
             'billing_name' => $request->get('name'),
             'comment' => $request->get('comment'),
-            'billing_subtotal' => (float) $request->get('subTotal'),
-            'billing_tax' => (float) $request->get('tax'),
-            'billing_total' => (float) $request->get('total'),
-            'status' => $request->get('status'),
-            'user_id' => $request->get('userId'),
+            'billing_subtotal' => (float) $subTotal,
+            'billing_tax' => (float) ($total - $subTotal),
+            'billing_total' => (float) $total,
+            'status' => '訂單已送出',
+            'user_id' => Auth::user()->id,
             'payment' => $request->get('payment'),
         ];
 
         $orderId = Order::create($orderForm)->id;
 
-        $cartItems = \Cart::session(auth()->id())->getContent();
         foreach ($cartItems as $item) {
             $quantityOfProduct = Product::find($item->id)->quantity;
             Product::find($item->id)->update(['quantity' => $quantityOfProduct - $item->quantity]);

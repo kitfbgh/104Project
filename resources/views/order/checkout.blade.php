@@ -56,11 +56,6 @@
         <div class="my-5 row justify-content-center">
           <form class="col-md-6" action="/orders" method="POST">
               @csrf
-              <input type="hidden" name="total" value="{{ $total }}" />
-              <input type="hidden" name="subTotal" value="{{ $subTotal }}"/>
-              <input type="hidden" name="tax" value="{{ $total - $subTotal }}"/>
-              <input type="hidden" name="status" value="訂單已送出"/>
-              <input type="hidden" name="userId" value="{{ $userId }}"/>
             <div class="form-group">
               <label for="payment">
                 付款方式
