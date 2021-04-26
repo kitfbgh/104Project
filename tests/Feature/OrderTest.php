@@ -25,6 +25,11 @@ class OrderTest extends TestCase
         $this->artisan('migrate:fresh');
     }
 
+    /**
+     * 測試admin進入到admin的訂單頁面
+     *
+     * @return void
+     */
     public function testIndexSuccess()
     {
         $this->demoAdminLoginIn();
@@ -40,6 +45,11 @@ class OrderTest extends TestCase
         $response->assertRedirect('/');
     }
 
+    /**
+     * 測試admin進入到admin的詳細訂單頁面
+     *
+     * @return void
+     */
     public function testOrderDetailSuccess()
     {
         $this->demoAdminLoginIn();
@@ -61,6 +71,11 @@ class OrderTest extends TestCase
         $this->assertEquals(404, $response->status());
     }
 
+    /**
+     * 測試user進入到結帳頁面
+     *
+     * @return void
+     */
     public function testCheckoutSuccess()
     {
         $this->demoUserLoginIn();
@@ -74,6 +89,11 @@ class OrderTest extends TestCase
         $this->assertEquals(500, $response->status());
     }
 
+    /**
+     * 測試user提交訂單功能
+     *
+     * @return void
+     */
     public function testStoreSuccess()
     {
         $this->demoUserLoginIn();
@@ -123,6 +143,11 @@ class OrderTest extends TestCase
         $this->assertEquals(422, $response->status());
     }
 
+    /**
+     * 測試訂單狀態更新
+     *
+     * @return void
+     */
     public function testUpdateSuccess()
     {
         // test user access
@@ -151,6 +176,11 @@ class OrderTest extends TestCase
         $this->assertEquals(404, $response->status());
     }
 
+    /**
+     * 測試admin刪除訂單
+     *
+     * @return void
+     */
     public function testDestroySuccess()
     {
         $order = factory(Order::class)->create();

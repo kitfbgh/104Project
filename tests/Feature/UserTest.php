@@ -27,6 +27,11 @@ class UserTest extends TestCase
         $this->artisan('migrate:fresh');
     }
 
+    /**
+     * 測試user進入到user的訂單頁面
+     *
+     * @return void
+     */
     public function testUserOrderSuccess()
     {
         $this->demoUserLoginIn();
@@ -42,6 +47,11 @@ class UserTest extends TestCase
         $response->assertRedirect('/');
     }
 
+    /**
+     * 測試user進入到user的詳細訂單頁面
+     *
+     * @return void
+     */
     public function testUserOrderDetailSuccess()
     {
         $this->demoUserLoginIn();
@@ -72,6 +82,11 @@ class UserTest extends TestCase
         $response->assertSee('Not Found');
     }
 
+    /**
+     * 測試user進入到user的個人資料頁面
+     *
+     * @return void
+     */
     public function testProfileSuccess()
     {
         $this->demoUserLoginIn();
@@ -85,6 +100,11 @@ class UserTest extends TestCase
         $this->assertEquals(500, $response->status());
     }
 
+    /**
+     * 測試user進入到商品的詳情頁面
+     *
+     * @return void
+     */
     public function testProductDetailSuccess()
     {
         $product = factory(Product::class)->create();
@@ -98,6 +118,11 @@ class UserTest extends TestCase
         $this->assertEquals(404, $response->status());
     }
 
+    /**
+     * 測試user更新個人資料
+     *
+     * @return void
+     */
     public function testUpdateSuccess()
     {
         $this->demoUserLoginIn();
@@ -118,6 +143,11 @@ class UserTest extends TestCase
         $this->assertEquals(404, $response->status());
     }
 
+    /**
+     * 測試admin進入到後台的使用者管理頁面
+     *
+     * @return void
+     */
     public function testIndexSuccess()
     {
         $this->demoAdminLoginIn();
@@ -133,6 +163,11 @@ class UserTest extends TestCase
         $response->assertRedirect('/');
     }
 
+    /**
+     * 測試admin刪除使用者
+     *
+     * @return void
+     */
     public function testDestroySuccess()
     {
         $this->demoAdminLoginIn();

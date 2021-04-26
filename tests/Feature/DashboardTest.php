@@ -22,6 +22,11 @@ class DashboardTest extends TestCase
         $this->artisan('migrate:fresh');
     }
 
+    /**
+     * 測試admin進入到後台頁面
+     *
+     * @return void
+     */
     public function testIndexSuccess()
     {
         $this->demoAdminLoginIn();

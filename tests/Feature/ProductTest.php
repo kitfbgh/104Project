@@ -25,6 +25,11 @@ class ProductTest extends TestCase
         $this->artisan('migrate:fresh');
     }
 
+    /**
+     * 測試進入到首頁頁面
+     *
+     * @return void
+     */
     public function testPageSuccess()
     {
         $this->demoAdminLoginIn();
@@ -40,6 +45,11 @@ class ProductTest extends TestCase
         $response->assertRedirect('/');
     }
 
+    /**
+     * 測試admin儲存商品
+     *
+     * @return void
+     */
     public function testStoreSuccess()
     {
         $this->demoAdminLoginIn();
@@ -89,6 +99,11 @@ class ProductTest extends TestCase
         $this->assertEquals(422, $response->status());
     }
 
+    /**
+     * 測試admin更新商品
+     *
+     * @return void
+     */
     public function testUpdateSuccess()
     {
         $this->demoAdminLoginIn();
@@ -145,6 +160,11 @@ class ProductTest extends TestCase
         $this->assertEquals(404, $response->status());
     }
 
+    /**
+     * 測試admin刪除商品
+     *
+     * @return void
+     */
     public function testDestroySuccess()
     {
         $this->demoAdminLoginIn();

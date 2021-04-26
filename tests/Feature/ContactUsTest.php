@@ -10,6 +10,11 @@ use Tests\TestCase;
 
 class ContactUsTest extends TestCase
 {
+    /**
+     * 測試進入到的聯絡賣家頁面
+     *
+     * @return void
+     */
     public function testIndexSuccess()
     {
         $response = $this->call('GET', '/contact-us');
