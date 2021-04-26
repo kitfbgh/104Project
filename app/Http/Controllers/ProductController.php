@@ -166,6 +166,20 @@ class ProductController extends Controller
 
         $status = $product->update($productForm);
 
+        if ($item = \Cart::session(auth()->id())->get($productId)) {
+            \Cart::session(auth()->id())->update($productId, array(
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => 1,
+                'attributes' => array(
+                    'imageUrl' => $product->imageUrl,
+                    'image' => $product->image,
+                    'unit' => $product->unit,
+                    'size' => $request->get('size'),
+                ),
+            ));
+        }
+
         return redirect(route('products'))->with('success', '產品更新成功');
     }
 
