@@ -132,6 +132,10 @@ class UserController extends Controller
             abort(422, '驗證錯誤');
         }
 
+        if (Auth::user()->id != $userId) {
+            abort(403, '權限錯誤');
+        }
+
         if (! $user = User::find($userId)) {
             abort(404);
         }
@@ -154,6 +158,10 @@ class UserController extends Controller
      */
     public function destroy($userId)
     {
+        if (Gate::allows('user')) {
+            abort(403, '權限錯誤');
+        }
+
         if (! $user = User::find($userId)) {
             abort(404);
         }

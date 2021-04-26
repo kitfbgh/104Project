@@ -69,6 +69,10 @@ class ProductController extends Controller
             abort(422, '驗證錯誤');
         }
 
+        if (Gate::allows('user')) {
+            abort(403, '權限錯誤');
+        }
+
         $productForm = [
             'name' => $request->get('name'),
             'category' => $request->get('category') ?? '',
@@ -121,6 +125,10 @@ class ProductController extends Controller
                 ]);
         } catch (\Exception $e) {
             abort(422, '驗證錯誤');
+        }
+
+        if (Gate::allows('user')) {
+            abort(403, '權限錯誤');
         }
 
         if (! $product = Product::find($productId)) {
@@ -191,6 +199,10 @@ class ProductController extends Controller
      */
     public function destroy($productId)
     {
+        if (Gate::allows('user')) {
+            abort(403, '權限錯誤');
+        }
+
         if (! $product = Product::find($productId)) {
             abort(404);
         }
