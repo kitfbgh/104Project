@@ -90,7 +90,7 @@
                     success: function (data) {
                         console.log(data);
                         if (data.success) {
-                            localStorage.setItem('token', data.data);
+                            Cookies.set('token', data.data, { secure: true });
                             window.location = "/";
                         }
                         else {
