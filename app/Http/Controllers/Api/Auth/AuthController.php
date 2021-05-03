@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,59 +10,79 @@ use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    /**
+     * Register a user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
+        if ($validator->fails()) {
+            return $this->sendError('註冊驗證錯誤', null, 422);
+        }
+
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
             'role' => User::ROLE_USER,
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => '使用者註冊成功',
-            'data' => $user,
-        ], 201);
+        return $this->sendResponse($user, '使用者註冊成功!', 200);
     }
 
+    /**
+     * Login a user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
-        $data = $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8'],
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
         ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('登入驗證錯誤', null, 422);
+        }
+
+        $data = [
+            'email' => $request['email'],
+            'password' => $request['password'],
+        ];
 
         //Request is validated
         //Crean token
         try {
             if (! $token = JWTAuth::attempt($data)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => '登入驗證錯誤',
-                ], 400);
+                return $this->sendError('登入驗證錯誤', null, 400);
             }
         } catch (JWTException $e) {
-            return response()->json([
-                    'success' => false,
-                    'message' => '無法創建令牌',
-                ], 500);
+            return $this->sendError('無法創建token', null, 500);
         }
 
-        return response()->json([
-            'success' => true,
-            'token' => $token,
-        ], 200);
+        return $this->sendResponse($token, '登入成功！', 201);
     }
 
+    /**
+     * Logout a user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         //valid credential
@@ -72,35 +92,43 @@ class AuthController extends Controller
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->messages
-            ], 422);
+            return $this->sendError('登出驗證錯誤', null, 422);
         }
 
         //Request is validated, do logout
         try {
-            JWTAuth::invalidate($request->token);
+            auth()->logout();
 
-            return response()->json([
-                'success' => true,
-                'message' => '使用者已登出'
-            ]);
+            return $this->sendResponse([], '使用者已登出', 200);
         } catch (JWTException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => '抱歉，伺服器出現錯誤'
-            ], 500);
+            return $this->sendError('抱歉，伺服器出現錯誤', null, 500);
         }
     }
 
-    public function getUser(Request $request)
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh(Request $request)
     {
-        $this->validate($request, [
+        //valid credential
+        $validator = Validator::make($request->only('token'), [
             'token' => 'required'
         ]);
 
-        $user = JWTAuth::authenticate($request->token);
+        //Send failed response if request is not valid
+        if ($validator->fails()) {
+            return $this->sendError('刷新驗證錯誤', null, 422);
+        }
 
-        return response()->json(['user' => $user], 200);
+        //Request is validated, do logout
+        try {
+            $refreshToken = auth()->refresh();
+
+            return $this->sendResponse($refreshToken, 'token已刷新', 200);
+        } catch (JWTException $exception) {
+            return $this->sendError('抱歉，伺服器出現錯誤', null, 500);
+        }
     }
 }

@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('註冊') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form  >
                         @csrf
 
                         <div class="form-group row">
@@ -63,7 +63,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button id="submitButton" type="button" class="btn btn-primary">
                                     {{ __('註冊') }}
                                 </button>
                             </div>
@@ -74,4 +74,42 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#submitButton').on('click', function () {
+                var email = $("#email").val();
+                var name = $("#name").val();
+                var password = $("#password").val();
+                var password_confirmation = $("#password-confirm").val();
+                $.ajax({
+                    url: "http://localhost/api/register",
+                    method: "POST",
+                    headers: {'X-CSRF-Token': $("meta[name='csrf-token']").attr("content")},
+                    cache: false,
+                    dataType: 'json',
+                    data: {
+                        email: email,
+                        name: name,
+                        password: password,
+                        password_confirmation: password_confirmation
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.success) {
+                            window.location = "/login";
+                        }
+                        else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

@@ -205,6 +205,7 @@
     <script src="https://getbootstrap.com/docs/5.0/examples/dashboard/dashboard.js"></script>
 
     <script type="text/javascript" src="{{ asset('js/mdb.min.js') }}"></script>
+    <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 
 </body>
 

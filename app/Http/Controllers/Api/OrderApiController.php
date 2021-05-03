@@ -28,6 +28,7 @@ class OrderController extends Controller
     public function __construct(OrderService $service)
     {
         $this->service = $service;
+        $this->middleware('auth:api');
     }
 
     /**
@@ -37,18 +38,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('user')) {
-            return redirect(route('welcome'));
-        }
-
-        $orders = Order::all();
-        return view(
-            'order.index',
-            compact('orders'),
-            [
-                'userId' => Auth::id(),
-            ],
-        );
+        return $this->service->getOrders();
     }
 
     public function orderDetail($orderId)
@@ -57,49 +47,13 @@ class OrderController extends Controller
             return redirect(route('welcome'));
         }
 
-        if (! $order = Order::find($orderId)) {
+        if (! $order = $this->service->getOrderById($orderId)) {
             abort(403, '查無訂單');
         }
-        $products = $order->products;
-
-        return view(
-            'order.orderDetail',
-            compact('order'),
-            compact('products'),
-        );
-    }
-
-    /**
-     * Show all Cart.
-     *
-     * @return
-     */
-    public function checkout()
-    {
-        $cartItems = \Cart::session(auth()->id())->getContent();
-
-        $subTotal = \Cart::session(auth()->id())->getSubTotal();
-        $taxCondition = new \Darryldecode\Cart\CartCondition(array(
-            'name' => 'VAT 5%',
-            'type' => 'tax',
-            'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
-            'value' => '5%',
-            'attributes' => array( // attributes field is optional
-                'description' => 'Value added tax',
-                'more_data' => 'more data here'
-            )
-        ));
-        $total = $subTotal + $taxCondition->getCalculatedValue($subTotal);
-
-        return view(
-            'order.checkout',
-            compact('cartItems'),
-            [
-                'subTotal' => $subTotal,
-                'total' => $total,
-                'userId' => Auth::id(),
-            ],
-        );
+        return response([
+            'success' => true,
+            'order' => $order,
+        ], 200);
     }
 
     /**
@@ -113,23 +67,14 @@ class OrderController extends Controller
     public function show($orderId)
     {
         try {
-            $order = Order::find($orderId);
+            $order = $this->service->getOrderById($orderId);
         } catch (Exception $e) {
             throw new APIException('找不到對應訂單', 404);
         }
         return response()->json([
-            'delivery_status' => $order['delivery_status'],
-            'billing_email' => $order['billing_email'],
-            'billing_address' => $order['billing_address'],
-            'billing_city' => $order['billing_city'],
-            'billing_province' => $order['billing_province'],
-            'billing_country' => $order['billing_country'],
-            'billing_postcode' => $order['billing_postcode'],
-            'billing_phone' => $order['billing_phone'],
-            'billing_subtotal' => $order['billing_subtotal'],
-            'billing_tax' => $order['billing_tax'],
-            'billing_total' => $order['billing_total'],
-        ]);
+            'succedd' => true,
+            'order' => $order,
+        ], 200);
     }
 
     /**
@@ -166,13 +111,13 @@ class OrderController extends Controller
             'user_id' => $request->get('userId'),
         ];
 
-        $orderId = Order::create($orderForm)->id;
+        $order = Order::create($orderForm);
 
         $cartItems = \Cart::session(auth()->id())->getContent();
         foreach ($cartItems as $item) {
             $quantityOfProduct = Product::find($item->id)->quantity;
             Product::find($item->id)->update(['quantity' => $quantityOfProduct - $item->quantity]);
-            Order::find($orderId)->products()->attach($item->id, [
+            $order->products()->attach($item->id, [
                 'quantity' => $item->quantity,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -180,11 +125,10 @@ class OrderController extends Controller
         }
         \Cart::session(auth()->id())->clear();
 
-        if (Gate::allows('user')) {
-            return redirect(route('user.orders', Auth::user()->id));
-        }
-
-        return redirect(route('orders'));
+        return response([
+            'success' => true,
+            'message' => '訂單已建立',
+        ], 200);
     }
 
     public function update(Request $request, $orderId)
@@ -199,17 +143,16 @@ class OrderController extends Controller
 
         $status = $order->update($orderForm);
 
-        if (Gate::allows('user')) {
-            return redirect(route('user.orders', Auth::user()->id));
-        }
-
-        return redirect(route('orders'));
+        return response([
+            'success' => true,
+            'message' => '訂單狀態更新',
+        ], 200);
     }
 
     public function destroy($orderId)
     {
         try {
-            $order = Order::find($orderId);
+            $order = $this->service->getOrderById($orderId);
         } catch (Exception $e) {
             throw new APIException('找不到對應訂單', 404);
         }
@@ -220,6 +163,9 @@ class OrderController extends Controller
         }
         $order->products()->detach();
         $status = $order->delete();
-        return redirect(route('orders'));
+        return response([
+            'success' => true,
+            'message' => '訂單已刪除',
+        ], 200);
     }
 }

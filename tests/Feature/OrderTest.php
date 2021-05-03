@@ -109,6 +109,7 @@ class OrderTest extends TestCase
             'tax' => $order->billing_tax,
             'payment' => $order->payment,
         ]);
+
         $this->assertEquals(302, $response->status());
         $response->assertRedirect('/orders/user/1');
 

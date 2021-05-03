@@ -24,7 +24,7 @@ class ProductRepository
     * @param int $id
     * @return Product
     */
-    public function getProductById($id): Product
+    public function getProductById($id)
     {
         return $this->model->find($id);
     }

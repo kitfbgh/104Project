@@ -9,10 +9,10 @@
 @endif
 
 <div>
-<table class="table table-striped">
+<table class="table table-striped table-sort">
     <thead class="table-dark">
         <tr>
-            <th>購買時間</th>
+            <th class="order-by-desc">購買時間</th>
             <th>收貨人</th>
             <th>Email</th>
             <th>狀態</th>

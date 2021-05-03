@@ -40,8 +40,8 @@ class ContactUsController extends Controller
               'msg' => $request->get('message'),
             ),
             function ($message) use ($request) {
-                $message->from($request->email);
-                $message->to('natz.liutest@gmail.com', 'Hello Admin!')->subject($request->get('subject'));
+                $message->from($request->get('email'));
+                $message->to('natz.liutest@gmail.com')->subject($request->get('subject'));
             }
         );
 

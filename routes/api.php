@@ -18,12 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']); //註冊
 Route::post('/login', [AuthController::class, 'login']); //登入
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/refresh', [AuthController::class, 'refresh']);
+Route::post('/user', [AuthController::class, 'getUser']);
 
-Route::get('/products/all', [ProductApiController::class, 'index']);
+
+Route::get('/products', [ProductApiController::class, 'index']);
 Route::get('/products/{productId}', [ProductApiController::class, 'show']);
-
-Route::group(['middleware' => ['jwt.verify']], function () {
-    Route::post('/products', [ProductApiController::class, 'store']);
-    Route::put('/products/{productId}', [ProductApiController::class, 'update']);
-    Route::delete('/products/{productId}', [ProductApiController::class, 'destroy']);
-});
+Route::post('/products', [ProductApiController::class, 'store']);
+Route::put('/products/{productId}', [ProductApiController::class, 'update']);
+Route::delete('/products/{productId}', [ProductApiController::class, 'destroy']);

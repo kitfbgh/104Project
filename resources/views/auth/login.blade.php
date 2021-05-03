@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('登入') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form >
                         @csrf
 
                         <div class="form-group row">
@@ -53,7 +53,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button id="submitButton" type="button" class="btn btn-primary">
                                     {{ __('登入') }}
                                 </button>
                                 @if (Route::has('password.request'))
@@ -70,3 +70,39 @@
     </div>
 </div>
 @endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#submitButton').on('click', function () {
+                var email = $("#email").val();
+                var password = $("#password").val();
+                $.ajax({
+                    url: "http://localhost/api/login",
+                    method: "POST",
+                    headers: {'X-CSRF-Token': $("meta[name='csrf-token']").attr("content")},
+                    cache: false,
+                    dataType: 'json',
+                    data: {
+                        email: email,
+                        password: password,
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.success) {
+                            localStorage.setItem('token', data.data);
+                            window.location = "/";
+                        }
+                        else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
