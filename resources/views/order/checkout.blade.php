@@ -1,6 +1,15 @@
 @extends('../user.index')
 
 @section('content')
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 <div>
     <div class="container mt-5">
       <div>
@@ -104,10 +113,10 @@
                 class="form-control"
                 id="usertel"
                 name="tel"
-                placeholder="請輸入10位數電話 (XXXXXXXXXX)"
+                placeholder="請輸入10位數電話 (09XXXXXXXX)"
                 minlength="10"
                 list="defaultTels"
-                pattern="[0-9]{10}"
+                pattern="09[0-9]{8}"
                 required
               />
               <datalist id="defaultTels">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\APIException;
+use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\OrderService;
@@ -106,23 +107,11 @@ class OrderController extends Controller
     /**
     * Store the Order.
     *
-    * @param Request $request
+    * @param OrderRequest $request
     * @return view
     */
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:50',
-            'name' => 'required|string|max:30',
-            'tel' => 'required|string|min:10',
-            'address' => 'required|string|max:60',
-            'payment' => 'required|string|max:30',
-        ]);
-
-        if ($validator->fails()) {
-            abort(422, '驗證錯誤');
-        }
-
         $cartItems = \Cart::session(auth()->id())->getContent();
         $subTotal = \Cart::session(auth()->id())->getSubTotal();
         $taxCondition = new \Darryldecode\Cart\CartCondition(array(

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\APIException;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Exception;
@@ -49,26 +50,11 @@ class ProductController extends Controller
     /**
      * Store the Product.
      *
-     * @param Request $request
+     * @param ProductRequest $request
      * @return view
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:100',
-            'price' => 'required|string|max:10',
-            'quantity' => 'required|string|min:1',
-            'image' => 'mimes:jpeg,jpg,png,gif,svg|max:10000',
-            'category' => 'required|string|max:30',
-            'origin_price' => 'required|string|max:10',
-            'unit' => 'required|string|max:15',
-        ]);
-
-        if ($validator->fails()) {
-            //$messages = $validator->errors()->getMessages();
-            abort(422, '驗證錯誤');
-        }
-
         if (Gate::allows('user')) {
             abort(403, '權限錯誤');
         }
@@ -108,25 +94,11 @@ class ProductController extends Controller
     /**
      * Update the Product.
      *
-     * @param Request $request, $productId
+     * @param ProductRequest $request, $productId
      * @return view
      */
-    public function update(Request $request, $productId)
+    public function update(ProductRequest $request, $productId)
     {
-        try {
-                $request->validate([
-                    'name' => 'required|string|max:100',
-                    'price' => 'required|string|max:10',
-                    'quantity' => 'required|string|min:1',
-                    'image' => 'mimes:jpeg,jpg,png,gif,svg|max:10000',
-                    'category' => 'required|string|max:30',
-                    'origin_price' => 'required|string|max:10',
-                    'unit' => 'required|string|max:15',
-                ]);
-        } catch (\Exception $e) {
-            abort(422, '驗證錯誤');
-        }
-
         if (Gate::allows('user')) {
             abort(403, '權限錯誤');
         }
